@@ -10,15 +10,18 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('total_people');
-            $table->json('packages');
+            $table->integer('total_people')->default(0);
+            $table->json('packages')->nullable();
             $table->json('addons')->nullable();
-            $table->decimal('subtotal', 10, 2);
+            $table->json('extra_items')->nullable();
+            $table->decimal('subtotal', 10, 2)->default(0);
             $table->decimal('discount_percent', 5, 2)->default(0);
             $table->decimal('discount_amount', 10, 2)->default(0);
-            $table->decimal('total', 10, 2);
-            $table->enum('payment', ['Cash', 'QRPH'])->default('Cash');
-            $table->enum('status', ['active', 'completed'])->default('active');
+            $table->decimal('total', 10, 2)->default(0);
+            $table->string('payment', 10)->default('Cash');
+            $table->decimal('amount_received', 10, 2)->default(0);
+            $table->decimal('change_given', 10, 2)->default(0);
+            $table->enum('status', ['active', 'completed', 'cancelled'])->default('active');
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });

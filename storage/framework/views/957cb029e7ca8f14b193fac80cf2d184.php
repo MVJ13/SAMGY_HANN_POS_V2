@@ -48,17 +48,16 @@
             }
         }).finally(() => { this.stockModal.saving = false; });
     }
-}"
-    @product-save-error.window="productModal.error = $event.detail.message; productModal.saving = false"
+}" @product-save-error.window="productModal.error = $event.detail.message; productModal.saving = false"
     @stock-save-error.window="stockModal.error = $event.detail.message; stockModal.saving = false"
     @keydown.escape.window="closeProduct(); closeStock()">
 
     <h2 style="margin-bottom:20px;color:#ff6b6b;">Inventory Management</h2>
 
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($flashMessage): ?>
-        <div class="flash-success" id="flash-inventory" wire:ignore><?php echo e($flashMessage); ?></div>
-        <script>
-            (function () {
+    <div class="flash-success" id="flash-inventory" wire:ignore><?php echo e($flashMessage); ?></div>
+    <script>
+        (function () {
                 var el = document.getElementById('flash-inventory');
                 if (el) {
                     setTimeout(function () {
@@ -69,93 +68,92 @@
                     }, 3000);
                 }
             })();
-        </script>
+    </script>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
     
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($lowStock->isNotEmpty()): ?>
-        <div class="low-stock-alert">
-            <h3><span style="font-size:1.5em;">⚠️</span> Low Stock Alert</h3>
-            <ul>
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $lowStock; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <li>
-                        <strong style="color:#fff;font-size:1.1em;"><?php echo e($item->name); ?></strong>
-                        <span style="color:#ffeb3b;"> → Only <?php echo e($item->stock); ?> <?php echo e($item->unit); ?> remaining!</span>
-                        <span style="color:#e0e0e0;"> (Reorder at <?php echo e($item->reorder_level); ?> <?php echo e($item->unit); ?>)</span>
-                    </li>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-            </ul>
-        </div>
+    <div class="low-stock-alert">
+        <h3><span style="font-size:1.5em;">⚠️</span> Low Stock Alert</h3>
+        <ul>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $lowStock; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <li>
+                <strong style="color:#fff;font-size:1.1em;"><?php echo e($item->name); ?></strong>
+                <span style="color:#ffeb3b;"> → Only <?php echo e($item->stock); ?> <?php echo e($item->unit); ?> remaining!</span>
+                <span style="color:#e0e0e0;"> (Reorder at <?php echo e($item->reorder_level); ?> <?php echo e($item->unit); ?>)</span>
+            </li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+        </ul>
+    </div>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
     
     <button class="btn btn-primary" style="width:auto;display:inline-block;margin-right:10px;"
-            @click="openProduct(null)">+ Add New Product</button>
-    <button class="btn btn-orange" style="width:auto;display:inline-block;"
-            wire:click="resetSampleData"
-            wire:confirm="This will reset inventory to sample data. Are you sure?">Reset Sample Data</button>
+        @click="openProduct(null)">+ Add New Product</button>
+    <button class="btn btn-orange" style="width:auto;display:inline-block;" wire:click="resetSampleData"
+        wire:confirm="This will reset inventory to sample data. Are you sure?">Reset Sample Data</button>
 
     
     <div class="inventory-grid"
-         :style="(productModal.open || stockModal.open) ? 'pointer-events:none;user-select:none;' : ''">
+        :style="(productModal.open || stockModal.open) ? 'pointer-events:none;user-select:none;' : ''">
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <div class="inventory-item <?php echo e($item->is_low_stock ? 'low-stock-item-highlight' : ''); ?>">
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($item->is_low_stock): ?>
-                    <div class="low-stock-badge">⚠️ LOW STOCK ⚠️</div>
-                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                <h3 style="color:<?php echo e($item->is_low_stock ? '#f44336' : '#ff6b6b'); ?>;"><?php echo e($item->name); ?></h3>
-                <p style="color:#999;"><?php echo e($item->category); ?></p>
-                <div class="stock-level <?php echo e($item->is_low_stock ? 'stock-low' : 'stock-ok'); ?>" style="font-size:1.8em;margin:15px 0;">
-                    <?php echo e($item->stock); ?> <?php echo e($item->unit); ?>
+        <div class="inventory-item <?php echo e($item->is_low_stock ? 'low-stock-item-highlight' : ''); ?>">
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($item->is_low_stock): ?>
+            <div class="low-stock-badge">⚠️ LOW STOCK ⚠️</div>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <h3 style="color:<?php echo e($item->is_low_stock ? '#f44336' : '#ff6b6b'); ?>;"><?php echo e($item->name); ?></h3>
+            <p style="color:#999;"><?php echo e($item->category); ?></p>
+            <div class="stock-level <?php echo e($item->is_low_stock ? 'stock-low' : 'stock-ok'); ?>"
+                style="font-size:1.8em;margin:15px 0;">
+                <?php echo e($item->stock); ?> <?php echo e($item->unit); ?>
 
-                </div>
-                <p style="font-size:0.9em;color:#999;">Cost: ₱<?php echo e(number_format($item->cost, 2)); ?>/<?php echo e($item->unit); ?></p>
-                <p style="font-size:0.85em;color:#999;margin-top:5px;">Reorder at: <?php echo e($item->reorder_level); ?> <?php echo e($item->unit); ?></p>
-
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($item->is_extra): ?>
-                    <div style="margin-top:8px;background:#1a3a1a;border:1px solid #4caf50;border-radius:6px;padding:6px 10px;font-size:0.82em;color:#4caf50;">
-                        🛒 In Extras menu · Sell @ ₱<?php echo e(number_format($item->selling_price, 2)); ?>
-
-                    </div>
-                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-
-                <?php
-                    $productJson = json_encode([
-                        'id'            => $item->id,
-                        'name'          => $item->name,
-                        'category'      => $item->category,
-                        'stock'         => (float) $item->stock,
-                        'unit'          => $item->unit,
-                        'cost'          => (float) $item->cost,
-                        'reorder_level' => (float) $item->reorder_level,
-                        'is_extra'      => (bool)  $item->is_extra,
-                        'selling_price' => (float) $item->selling_price,
-                    ]);
-                    $stockJson = json_encode([
-                        'id'   => $item->id,
-                        'name' => $item->name,
-                    ]);
-                ?>
-                <div style="margin-top:15px;">
-                    <button class="btn btn-orange btn-sm"
-                            @click="openStock(<?php echo e($stockJson); ?>)">Adjust Stock</button>
-                    <button class="btn btn-orange btn-sm"
-                            @click="openProduct(<?php echo e($productJson); ?>)">Edit</button>
-                    <button class="btn btn-red btn-sm"
-                            @click="if(confirm('Delete <?php echo e($item->name); ?>?')) { $wire.deleteProduct(<?php echo e($item->id); ?>).then(() => setTimeout(() => $wire.$refresh(), 150)); }">Delete</button>
-                    <button class="btn btn-sm"
-                            style="margin:2px;background:<?php echo e($item->is_extra ? '#4caf50' : '#424242'); ?>;color:#fff;"
-                            @click="$wire.toggleExtraFromCard(<?php echo e($item->id); ?>).then(() => setTimeout(() => $wire.$refresh(), 150))">
-                        <?php echo e($item->is_extra ? '🛒 In Extras' : '+ Add to Extras'); ?>
-
-                    </button>
-                </div>
             </div>
+            <p style="font-size:0.9em;color:#999;">Cost: ₱<?php echo e(number_format($item->cost, 2)); ?>/<?php echo e($item->unit); ?></p>
+            <p style="font-size:0.85em;color:#999;margin-top:5px;">Reorder at: <?php echo e($item->reorder_level); ?> <?php echo e($item->unit); ?></p>
+
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($item->is_extra): ?>
+            <div
+                style="margin-top:8px;background:#1a3a1a;border:1px solid #4caf50;border-radius:6px;padding:6px 10px;font-size:0.82em;color:#4caf50;">
+                🛒 In Extras menu · Sell @ ₱<?php echo e(number_format($item->selling_price, 2)); ?>
+
+            </div>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+            <?php
+            $productJson = json_encode([
+            'id' => $item->id,
+            'name' => $item->name,
+            'category' => $item->category,
+            'stock' => (float) $item->stock,
+            'unit' => $item->unit,
+            'cost' => (float) $item->cost,
+            'reorder_level' => (float) $item->reorder_level,
+            'is_extra' => (bool) $item->is_extra,
+            'selling_price' => (float) $item->selling_price,
+            ]);
+            $stockJson = json_encode([
+            'id' => $item->id,
+            'name' => $item->name,
+            ]);
+            ?>
+            <div style="margin-top:15px;">
+                <button class="btn btn-orange btn-sm" @click="openStock(<?php echo e($stockJson); ?>)">Adjust Stock</button>
+                <button class="btn btn-orange btn-sm" @click="openProduct(<?php echo e($productJson); ?>)">Edit</button>
+                <button class="btn btn-red btn-sm"
+                    @click="if(confirm('Delete <?php echo e($item->name); ?>?')) { $wire.deleteProduct(<?php echo e($item->id); ?>).then(() => setTimeout(() => $wire.$refresh(), 150)); }">Delete</button>
+                <button class="btn btn-sm"
+                    style="margin:2px;background:<?php echo e($item->is_extra ? '#4caf50' : '#424242'); ?>;color:#fff;"
+                    @click="$wire.toggleExtraFromCard(<?php echo e($item->id); ?>).then(() => setTimeout(() => $wire.$refresh(), 150))">
+                    <?php echo e($item->is_extra ? '🛒 In Extras' : '+ Add to Extras'); ?>
+
+                </button>
+            </div>
+        </div>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-            <div class="empty-state" style="grid-column:1/-1;">
-                <h3>No products in inventory</h3>
-                <p>Click "+ Add New Product" or "Reset Sample Data"</p>
-            </div>
+        <div class="empty-state" style="grid-column:1/-1;">
+            <h3>No products in inventory</h3>
+            <p>Click "+ Add New Product" or "Reset Sample Data"</p>
+        </div>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     </div>
 
@@ -170,13 +168,13 @@
             <div class="inv-card-label">⚠️ Low Stock Items</div>
             <div class="inv-card-value" style="color:#f44336;"><?php echo e($lowStock->count()); ?></div>
             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($lowStock->isNotEmpty()): ?>
-                <div style="margin-top:15px;font-size:0.9em;border-top:1px solid #424242;padding-top:10px;">
-                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $lowStock; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div style="padding:5px 0;color:#ffeb3b;">• <?php echo e($item->name); ?>: <strong><?php echo e($item->stock); ?> <?php echo e($item->unit); ?></strong></div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                </div>
+            <div style="margin-top:15px;font-size:0.9em;border-top:1px solid #424242;padding-top:10px;">
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $lowStock; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div style="padding:5px 0;color:#ffeb3b;">• <?php echo e($item->name); ?>: <strong><?php echo e($item->stock); ?> <?php echo e($item->unit); ?></strong></div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            </div>
             <?php else: ?>
-                <div style="color:#4caf50;margin-top:10px;">All items well stocked! 🎉</div>
+            <div style="color:#4caf50;margin-top:10px;">All items well stocked! 🎉</div>
             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
         </div>
         <div class="inv-card" style="border-left:5px solid #4caf50;">
@@ -188,51 +186,54 @@
     
     <h3 style="margin-bottom:20px;color:#ff6b6b;">Stock Movement History</h3>
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($movements->isEmpty()): ?>
-        <div class="empty-state"><p>No stock movements recorded</p></div>
+    <div class="empty-state">
+        <p>No stock movements recorded</p>
+    </div>
     <?php else: ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product</th><th>Type</th><th>Quantity</th>
-                    <th>Previous</th><th>New</th><th>Notes</th><th>Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $movements; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <tr>
-                        <td><?php echo e($m->product_name); ?></td>
-                        <td style="color:<?php echo e($m->type === 'in' ? '#4caf50' : '#f44336'); ?>;font-weight:600;">
-                            <?php echo e($m->type === 'in' ? '↑ IN' : '↓ OUT'); ?>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Previous</th>
+                <th>New</th>
+                <th>Notes</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $movements; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <tr>
+                <td><?php echo e($m->product_name); ?></td>
+                <td style="color:<?php echo e($m->type === 'in' ? '#4caf50' : '#f44336'); ?>;font-weight:600;">
+                    <?php echo e($m->type === 'in' ? '↑ IN' : '↓ OUT'); ?>
 
-                        </td>
-                        <td><?php echo e($m->quantity); ?></td>
-                        <td><?php echo e($m->previous_stock); ?></td>
-                        <td><?php echo e($m->new_stock); ?></td>
-                        <td><?php echo e($m->notes); ?></td>
-                        <td><?php echo e($m->created_at->format('m/d/Y, g:i A')); ?></td>
-                    </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-            </tbody>
-        </table>
+                </td>
+                <td><?php echo e($m->quantity); ?></td>
+                <td><?php echo e($m->previous_stock); ?></td>
+                <td><?php echo e($m->new_stock); ?></td>
+                <td><?php echo e($m->notes); ?></td>
+                <td><?php echo e($m->created_at->format('m/d/Y, g:i A')); ?></td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+        </tbody>
+    </table>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
     
     <template x-teleport="body">
-        <div x-show="productModal.open"
-             x-transition:enter="transition ease-out duration-150"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-100"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="modal-backdrop"
-             @click.self="closeProduct()"
-             style="display:none;">
+        <div x-show="productModal.open" x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="modal-backdrop" @click.self="closeProduct()"
+            style="display:none;">
 
             <div class="modal-box" @click.stop>
                 <div class="modal-header">
                     <h2 style="color:#ff6b6b;"
-                        x-text="productModal.product && productModal.product.id ? 'Edit Product' : 'Add New Product'"></h2>
+                        x-text="productModal.product && productModal.product.id ? 'Edit Product' : 'Add New Product'">
+                    </h2>
                     <button class="close-modal" @click="closeProduct()">×</button>
                 </div>
 
@@ -274,29 +275,35 @@
                         <div class="two-col">
                             <div class="form-group">
                                 <label>Cost Price (₱)</label>
-                                <input type="number" x-model.number="productModal.product.cost" min="0" step="0.01" placeholder="0.00">
+                                <input type="number" x-model.number="productModal.product.cost" min="0" step="0.01"
+                                    placeholder="0.00">
                             </div>
                             <div class="form-group">
                                 <label>Reorder Level</label>
-                                <input type="number" x-model.number="productModal.product.reorder_level" min="0" step="0.01">
+                                <input type="number" x-model.number="productModal.product.reorder_level" min="0"
+                                    step="0.01">
                             </div>
                         </div>
 
-                        <div class="form-group" style="background:#1a1a1a;border:1px solid #424242;border-radius:8px;padding:14px;">
+                        <div class="form-group"
+                            style="background:#1a1a1a;border:1px solid #424242;border-radius:8px;padding:14px;">
                             <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin:0;">
-                                <input type="checkbox" x-model="productModal.product.is_extra" style="width:18px;height:18px;accent-color:#ff6b6b;">
-                                <span style="color:#fff;font-weight:600;">🛒 Show in "Extra Items" on New Order tab</span>
+                                <input type="checkbox" x-model="productModal.product.is_extra"
+                                    style="width:18px;height:18px;accent-color:#ff6b6b;">
+                                <span style="color:#fff;font-weight:600;">🛒 Show in "Extra Items" on New Order
+                                    tab</span>
                             </label>
-                            <p style="color:#999;font-size:0.85em;margin:8px 0 0 28px;">Stock will be deducted automatically when sold.</p>
+                            <p style="color:#999;font-size:0.85em;margin:8px 0 0 28px;">Stock will be deducted
+                                automatically when sold.</p>
                             <div x-show="productModal.product.is_extra" style="margin-top:12px;margin-left:28px;">
-                                <label style="font-size:0.9em;color:#ccc;">Selling Price (₱) <span style="color:#ff6b6b;">*</span></label>
-                                <input type="number" x-model.number="productModal.product.selling_price" min="0" step="0.01" placeholder="0.00" style="max-width:180px;">
+                                <label style="font-size:0.9em;color:#ccc;">Selling Price (₱) <span
+                                        style="color:#ff6b6b;">*</span></label>
+                                <input type="number" x-model.number="productModal.product.selling_price" min="0"
+                                    step="0.01" placeholder="0.00" style="max-width:180px;">
                             </div>
                         </div>
 
-                        <button class="btn btn-primary"
-                                @click="saveProduct()"
-                                :disabled="productModal.saving">
+                        <button class="btn btn-primary" @click="saveProduct()" :disabled="productModal.saving">
                             <span x-text="productModal.saving ? 'Saving…' : 'Save Product'"></span>
                         </button>
                     </div>
@@ -307,16 +314,10 @@
 
     
     <template x-teleport="body">
-        <div x-show="stockModal.open"
-             x-transition:enter="transition ease-out duration-150"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-100"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="modal-backdrop"
-             @click.self="closeStock()"
-             style="display:none;">
+        <div x-show="stockModal.open" x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="modal-backdrop" @click.self="closeStock()" style="display:none;">
 
             <div class="modal-box" @click.stop>
                 <div class="modal-header">
@@ -342,7 +343,8 @@
 
                         <div class="form-group">
                             <label>Quantity</label>
-                            <input type="number" x-model.number="stockModal.product.qty" min="0.01" step="0.01" placeholder="0.00">
+                            <input type="number" x-model.number="stockModal.product.qty" min="0.01" step="0.01"
+                                placeholder="0.00">
                         </div>
 
                         <div class="form-group">
@@ -350,9 +352,7 @@
                             <input type="text" x-model="stockModal.product.notes" placeholder="Reason for movement">
                         </div>
 
-                        <button class="btn btn-primary"
-                                @click="saveStock()"
-                                :disabled="stockModal.saving">
+                        <button class="btn btn-primary" @click="saveStock()" :disabled="stockModal.saving">
                             <span x-text="stockModal.saving ? 'Saving…' : 'Save Movement'"></span>
                         </button>
                     </div>
@@ -361,5 +361,4 @@
         </div>
     </template>
 
-</div>
-<?php /**PATH C:\Users\Mark\samgyeopsal-pos\resources\views/livewire/inventory.blade.php ENDPATH**/ ?>
+</div><?php /**PATH C:\Users\Mark\samgyeopsal-pos\resources\views/livewire/inventory.blade.php ENDPATH**/ ?>

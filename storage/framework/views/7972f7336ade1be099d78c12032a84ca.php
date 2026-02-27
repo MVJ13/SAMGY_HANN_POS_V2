@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,18 +9,24 @@
     <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
 
 </head>
+
 <body>
     <div class="pos-container">
 
         <header class="pos-header">
-            <h1>🥩 Unlimited Samgyeopsal POS System</h1>
+            <img src="<?php echo e(asset('images/Samgy_Hann_Logo.png')); ?>" alt="Samgy Hann Logo" class="pos-logo">
+
+            <h1 class="pos-title">
+                SAMGY HANN <span class="price">199</span>
+            </h1>
         </header>
 
+
         <div class="tabs" wire:ignore>
-            <button class="tab-btn active" id="btn-orders"     onclick="switchTab('orders')">New Order</button>
-            <button class="tab-btn"        id="btn-receipts"   onclick="switchTab('receipts')">Receipts</button>
-            <button class="tab-btn"        id="btn-inventory"  onclick="switchTab('inventory')">Inventory</button>
-            <button class="tab-btn"        id="btn-statistics" onclick="switchTab('statistics')">Statistics</button>
+            <button class="tab-btn active" id="btn-orders" onclick="switchTab('orders')">New Order</button>
+            <button class="tab-btn" id="btn-receipts" onclick="switchTab('receipts')">Receipts</button>
+            <button class="tab-btn" id="btn-inventory" onclick="switchTab('inventory')">Inventory</button>
+            <button class="tab-btn" id="btn-statistics" onclick="switchTab('statistics')">Statistics</button>
         </div>
 
         
@@ -164,5 +171,5 @@ if (isset($__slots)) unset($__slots);
         });
     </script>
 </body>
-</html>
-<?php /**PATH C:\Users\Mark\samgyeopsal-pos\resources\views/pos.blade.php ENDPATH**/ ?>
+
+</html><?php /**PATH C:\Users\Mark\samgyeopsal-pos\resources\views/pos.blade.php ENDPATH**/ ?>
