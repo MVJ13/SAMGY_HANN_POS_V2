@@ -4,7 +4,9 @@ use Illuminate\Support\Str;
 
 return [
 
-    'default' => env('CACHE_STORE', 'database'),
+    // Default changed from 'database' to 'file' — this app has no cache table migration
+    // and does not need one. File cache works out of the box with no setup.
+    'default' => env('CACHE_STORE', 'file'),
 
     'stores' => [
 

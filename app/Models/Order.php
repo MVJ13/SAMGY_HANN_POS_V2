@@ -68,19 +68,4 @@ class Order extends Model
             ->join(', ');
     }
 
-    public function getAddonsSummaryAttribute(): string
-    {
-        if (empty($this->addons)) return '';
-        return collect($this->addons)
-            ->map(fn($a) => "{$a['people']}× {$a['name']}")
-            ->join(', ');
-    }
-
-    public function getExtraItemsSummaryAttribute(): string
-    {
-        if (empty($this->extra_items)) return '';
-        return collect($this->extra_items)
-            ->map(fn($e) => "{$e['qty']}× {$e['name']}")
-            ->join(', ');
-    }
 }

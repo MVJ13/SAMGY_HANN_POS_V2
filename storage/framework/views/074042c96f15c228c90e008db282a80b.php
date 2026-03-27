@@ -24,6 +24,9 @@
      @keydown.escape.window="closeModal()">
 
     
+    <div class="rcpt-panel">
+
+    
     <div class="rcpt-header">
         <div>
             <h2 class="rcpt-title">Order Queue</h2>
@@ -131,6 +134,8 @@
                 </div>
             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+    </div>
+
     </div>
 
     
@@ -253,8 +258,17 @@
                                     <div>
                                         <template x-for="(dp, i) in order.discount_persons" :key="i">
                                             <div class="rcpt-paper-row rcpt-paper-row-discount" style="font-size:0.88em;">
-                                                <span x-text="(dp.type==='senior'?'👴 Senior SC':dp.type==='pwd'?'♿ PWD':'🧒 Child')+' · '+(dp.pkg==='p199'?'Basic':dp.pkg==='p269'?'Premium':'Deluxe')+' −'+dp.pct+'%'"></span>
-                                                <span x-text="'−₱'+Number((dp.pkg==='p199'?199:dp.pkg==='p269'?269:349)*(dp.pct/100)).toLocaleString('en-PH',{minimumFractionDigits:2})"></span>
+                                                <span x-text="(() => {
+                                                    const pkgName = dp.pkg==='p199'?'Basic':dp.pkg==='p269'?'Premium':'Deluxe';
+                                                    const typeName = dp.type==='senior'?'👴 Senior SC':dp.type==='pwd'?'♿ PWD':'🧒 Child';
+                                                    return typeName + ' · ' + pkgName + ' −' + dp.pct + '%';
+                                                })()"></span>
+                                                <span x-text="(() => {
+                                                    const pkgName = dp.pkg==='p199'?'Basic':dp.pkg==='p269'?'Premium':'Deluxe';
+                                                    const pkg = order.packages.find(p => p.name === pkgName);
+                                                    const price = pkg ? Number(pkg.price) : 0;
+                                                    return '−₱' + (price * (dp.pct/100)).toLocaleString('en-PH',{minimumFractionDigits:2});
+                                                })()"></span>
                                             </div>
                                         </template>
                                     </div>
@@ -353,31 +367,17 @@
              x-transition:leave="transition ease-in duration-150"
              x-transition:leave-start="opacity-100 scale-100"
              x-transition:leave-end="opacity-0 scale-95"
-             style="position:relative;background:#242428;border:1px solid #3a3a3f;border-radius:16px;padding:2rem;width:100%;max-width:380px;box-shadow:0 32px 64px rgba(0,0,0,0.6);text-align:center;">
-
-            
-            <div style="width:56px;height:56px;border-radius:50%;background:#3a1a1a;border:1.5px solid #7a2a2a;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </div>
-
-            <h3 style="font-size:1.15rem;font-weight:700;color:#f0f0f0;margin:0 0 0.5rem;">Cancel Order?</h3>
-            <p style="font-size:0.9rem;color:#a0a0a8;margin:0 0 1.75rem;line-height:1.5;">
-                Order <span x-text="'#' + (order ? order.receipt_number : '')" style="font-weight:600;color:#f0f0f0;"></span> will be marked as cancelled. This cannot be undone.
+             class="confirm-dialog">
+            <div class="confirm-dialog-icon confirm-dialog-icon-danger">✕</div>
+            <h3 class="confirm-dialog-title">Cancel Order?</h3>
+            <p class="confirm-dialog-body">
+                Order <strong x-text="'#' + (order ? order.receipt_number : '')"></strong>
+                will be marked as cancelled.
             </p>
-
-            <div style="display:flex;gap:0.75rem;">
-                <button @click="cancelConfirm = false"
-                        style="flex:1;padding:0.75rem 1rem;border-radius:10px;border:1.5px solid #3a3a3f;background:#1c1c1f;color:#e0e0e0;font-size:0.9rem;font-weight:600;cursor:pointer;transition:background 0.15s;"
-                        onmouseover="this.style.background='#2c2c31'" onmouseout="this.style.background='#1c1c1f'">
-                    Keep Order
-                </button>
-                <button @click="doCancel()"
-                        style="flex:1;padding:0.75rem 1rem;border-radius:10px;border:1.5px solid #cc2a2a;background:#cc2a2a;color:#fff;font-size:0.9rem;font-weight:600;cursor:pointer;transition:background 0.15s;"
-                        onmouseover="this.style.background='#b02020'" onmouseout="this.style.background='#cc2a2a'">
-                    Yes, Cancel
-                </button>
+            <p class="confirm-dialog-warning">This cannot be undone.</p>
+            <div class="confirm-dialog-actions">
+                <button class="confirm-btn confirm-btn-cancel" @click="cancelConfirm = false">Keep Order</button>
+                <button class="confirm-btn confirm-btn-danger" @click="doCancel()">Yes, Cancel</button>
             </div>
         </div>
     </div>

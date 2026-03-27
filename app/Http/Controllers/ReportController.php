@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\StockMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,12 +22,20 @@ class ReportController extends Controller
         $period = $request->get('period', 'today');
 
         if ($period === 'specific_day' && $request->filled('date')) {
-            $d = Carbon::parse($request->get('date'));
+            try {
+                $d = Carbon::parse($request->get('date'));
+            } catch (\Exception $e) {
+                $d = now();
+            }
             $startDate   = $d->copy()->startOfDay();
             $endDate     = $d->copy()->endOfDay();
             $periodLabel = $d->format('F j, Y');
         } elseif ($period === 'specific_month' && $request->filled('month')) {
-            $d = Carbon::parse($request->get('month') . '-01');
+            try {
+                $d = Carbon::parse($request->get('month') . '-01');
+            } catch (\Exception $e) {
+                $d = now();
+            }
             $startDate   = $d->copy()->startOfMonth();
             $endDate     = $d->copy()->endOfMonth();
             $periodLabel = $d->format('F Y');
@@ -84,35 +93,60 @@ class ReportController extends Controller
             }
         });
 
-        // ── Daily revenue ──
-        $revenueByDay = (clone $base)
-            ->selectRaw('DATE(completed_at) as day, SUM(total) as revenue, COUNT(*) as orders, SUM(total_people) as guests')
-            ->groupBy('day')
-            ->orderBy('day')
-            ->get();
+        // ── Daily revenue — PHP-side bucketing to avoid DB timezone issues ──
+        $tz = config('app.timezone', 'Asia/Manila');
+        $allCompletedOrders = (clone $base)->select('completed_at', 'total', 'total_people')->get();
+
+        $dayBuckets = [];
+        foreach ($allCompletedOrders as $ord) {
+            $localDate = \Carbon\Carbon::parse($ord->completed_at)->setTimezone($tz)->format('Y-m-d');
+            if (!isset($dayBuckets[$localDate])) {
+                $dayBuckets[$localDate] = ['revenue' => 0.0, 'orders' => 0, 'guests' => 0];
+            }
+            $dayBuckets[$localDate]['revenue'] += (float) $ord->total;
+            $dayBuckets[$localDate]['orders']++;
+            $dayBuckets[$localDate]['guests']  += (int) $ord->total_people;
+        }
+        ksort($dayBuckets);
+
+        $revenueByDay = collect(array_map(function($day, $data) {
+            return (object) [
+                'day'     => $day,
+                'revenue' => round($data['revenue'], 2),
+                'orders'  => $data['orders'],
+                'guests'  => $data['guests'],
+            ];
+        }, array_keys($dayBuckets), $dayBuckets));
 
         // ── All orders ──
         $orders = (clone $base)->orderBy('completed_at', 'desc')->get();
 
         // ── PEAK HOURS ──
         // Build hour-by-hour breakdown across the whole period
-        $hourlyRows = (clone $base)
-            ->selectRaw('HOUR(completed_at) as hr, COUNT(*) as orders, SUM(total) as revenue, SUM(total_people) as guests')
-            ->groupBy('hr')
-            ->orderBy('hr')
-            ->get()
-            ->keyBy('hr');
+        // Peak hours — bucket by PHT hour in PHP to avoid DB timezone issues
+        $tz = config('app.timezone', 'Asia/Manila');
+        $allOrdersForHours = (clone $base)->select('completed_at', 'total', 'total_people')->get();
+
+        $hourBuckets = [];
+        foreach ($allOrdersForHours as $ord) {
+            $h = (int) \Carbon\Carbon::parse($ord->completed_at)->setTimezone($tz)->format('G');
+            if (!isset($hourBuckets[$h])) {
+                $hourBuckets[$h] = ['orders' => 0, 'revenue' => 0.0, 'guests' => 0];
+            }
+            $hourBuckets[$h]['orders']++;
+            $hourBuckets[$h]['revenue'] += (float) $ord->total;
+            $hourBuckets[$h]['guests']  += (int)   $ord->total_people;
+        }
 
         $peakHours = collect();
         for ($h = 0; $h <= 23; $h++) {
-            if ($hourlyRows->has($h)) {
-                $row = $hourlyRows[$h];
+            if (isset($hourBuckets[$h])) {
                 $peakHours->push([
                     'label'   => ($h % 12 ?: 12) . ':00 ' . ($h >= 12 ? 'PM' : 'AM'),
                     'hour'    => $h,
-                    'orders'  => (int)   $row->orders,
-                    'revenue' => (float) $row->revenue,
-                    'guests'  => (int)   $row->guests,
+                    'orders'  => $hourBuckets[$h]['orders'],
+                    'revenue' => round($hourBuckets[$h]['revenue'], 2),
+                    'guests'  => $hourBuckets[$h]['guests'],
                 ]);
             }
         }
@@ -120,15 +154,29 @@ class ReportController extends Controller
         $busiestHour    = $peakHours->sortByDesc('orders')->first();
 
         // ── EXTRAS & ADD-ONS BREAKDOWN ──
-        $extrasMap  = [];   // name → [qty, revenue]
+        $extrasMap  = [];   // name → [qty, revenue, cost, profit]
         $addonsMap  = [];
 
-        (clone $base)->select('extra_items', 'addons')->get()->each(function ($order) use (&$extrasMap, &$addonsMap) {
+        // Build product cost map here (used for legacy order fallback AND for P&L below)
+        $productCostMap = Product::pluck('cost', 'name')->toArray();
+
+        (clone $base)->select('extra_items', 'addons')->get()->each(function ($order) use (&$extrasMap, &$addonsMap, $productCostMap) {
             foreach (($order->extra_items ?? []) as $item) {
                 $name = $item['name'] ?? 'Unknown';
-                if (!isset($extrasMap[$name])) $extrasMap[$name] = ['qty' => 0, 'revenue' => 0];
-                $extrasMap[$name]['qty']     += (int)   ($item['qty']    ?? 0);
-                $extrasMap[$name]['revenue'] += (float) ($item['amount'] ?? 0);
+                if (!isset($extrasMap[$name])) $extrasMap[$name] = ['qty' => 0, 'revenue' => 0, 'cost' => 0, 'profit' => 0];
+                $qty     = (int)   ($item['qty']    ?? 0);
+                $revenue = (float) ($item['amount'] ?? 0);
+                // Use cost_price locked in at time of sale if available (new orders),
+                // otherwise fall back to current product cost (legacy orders before this fix).
+                $unitCost = isset($item['cost_price'])
+                    ? (float) $item['cost_price']
+                    : (float) ($productCostMap[$name] ?? 0);
+                $cost   = $qty * $unitCost;
+                $profit = $revenue - $cost;
+                $extrasMap[$name]['qty']     += $qty;
+                $extrasMap[$name]['revenue'] += $revenue;
+                $extrasMap[$name]['cost']    += $cost;
+                $extrasMap[$name]['profit']  += $profit;
             }
             foreach (($order->addons ?? []) as $addon) {
                 $name = $addon['name'] ?? 'Unknown';
@@ -138,11 +186,14 @@ class ReportController extends Controller
             }
         });
 
-        // Sort by revenue desc
-        arsort($extrasMap);
-        arsort($addonsMap);
+        // Sort by revenue desc (arsort sorts arrays by value — use uasort for nested arrays)
+        uasort($extrasMap, fn($a, $b) => $b['revenue'] <=> $a['revenue']);
+        uasort($addonsMap, fn($a, $b) => $b['revenue'] <=> $a['revenue']);
 
         $totalExtrasRevenue  = collect($extrasMap)->sum('revenue');
+        $totalExtrasCost     = collect($extrasMap)->sum('cost');
+        $totalExtrasProfit   = collect($extrasMap)->sum('profit');
+        $extrasMarginPct     = $totalExtrasRevenue > 0 ? round(($totalExtrasProfit / $totalExtrasRevenue) * 100, 1) : 0;
         $totalAddonsRevenue  = collect($addonsMap)->sum('revenue');
 
         // ── DISCOUNT TYPE BREAKDOWN ──
@@ -152,18 +203,20 @@ class ReportController extends Controller
             'child'  => ['label' => 'Child / Kid', 'emoji' => '🧒', 'color' => '#e67e22', 'count' => 0, 'amount' => 0],
         ];
 
+        $settingPrices  = Setting::packagePrices();
+        $discPkgPrices  = ['p199' => $settingPrices['basic'], 'p269' => $settingPrices['premium'], 'p349' => $settingPrices['deluxe']];
+
         (clone $base)
             ->whereNotNull('discount_persons')
             ->select('discount_persons', 'packages')
             ->get()
-            ->each(function ($order) use (&$discountTypes) {
-                $pkgPrices = ['p199' => 199, 'p269' => 269, 'p349' => 349];
+            ->each(function ($order) use (&$discountTypes, $discPkgPrices) {
                 foreach (($order->discount_persons ?? []) as $d) {
                     $type = $d['type'] ?? null;
                     if (!isset($discountTypes[$type])) continue;
                     $pkg    = $d['pkg'] ?? 'p199';
                     $pct    = (float) ($d['pct'] ?? ($type === 'child' ? 10 : 20));
-                    $price  = $pkgPrices[$pkg] ?? 199;
+                    $price  = $discPkgPrices[$pkg] ?? $discPkgPrices['p199'];
                     $amount = $price * ($pct / 100);
                     $discountTypes[$type]['count']++;
                     $discountTypes[$type]['amount'] += $amount;
@@ -171,6 +224,8 @@ class ReportController extends Controller
             });
 
         $totalDiscountedGuests = collect($discountTypes)->sum('count');
+        // Filter out discount types with zero count so they don't show as empty cards
+        $discountTypes = array_filter($discountTypes, fn($dt) => $dt['count'] > 0);
 
         // ── Opening → Closing stock snapshot ──
         // For each product:
@@ -217,6 +272,60 @@ class ReportController extends Controller
         $outOfStockCount     = $inventory->filter(fn($p) => (float)$p->stock <= 0)->count();
         $totalInventoryValue = $inventory->sum(fn($p) => (float)$p->stock * (float)$p->cost);
 
+
+        // ── PROFIT & LOSS (COGS vs Revenue) ──
+        // COGS = sum of (quantity × product cost) for all 'out' stock movements
+        // that were triggered by sales (notes contain 'sale' or 'order', or type='out')
+        // We also track manual outs separately so owner can see the split.
+
+        $movementsInPeriod = StockMovement::when($startDate && $endDate, fn($q) =>
+                $q->whereBetween('created_at', [$startDate, $endDate])
+            )->get();
+
+        $salesCogs   = 0;  // from automatic order deductions
+        $manualCogs  = 0;  // from manual stock-out adjustments
+        $restockCost = 0;  // cost of stock brought IN (restocking spend)
+
+        // $productCostMap already built above for extras fallback — reused here
+
+        foreach ($movementsInPeriod as $mov) {
+            // Use unit_cost locked in at time of movement for accurate historical COGS.
+            // Fall back to current product cost for legacy movements created before this fix.
+            $unitCost = (float) $mov->unit_cost > 0
+                ? (float) $mov->unit_cost
+                : (float) ($productCostMap[$mov->product_name] ?? 0);
+            $qty      = (float) $mov->quantity;
+            $notes    = strtolower($mov->notes ?? '');
+
+            if ($mov->type === 'out') {
+                // Auto-deducted by sales system: "Sold via order #XXXX"
+                if (str_contains($notes, 'sold via order') || str_contains($notes, 'order #')) {
+                    $salesCogs += $qty * $unitCost;
+                } else {
+                    // Manual removals: waste, spoilage, corrections, reset, etc.
+                    $manualCogs += $qty * $unitCost;
+                }
+            } elseif ($mov->type === 'in') {
+                // Skip initial stock, sample data, and cancel reversals
+                $isSystemIn = str_contains($notes, 'initial stock')
+                           || str_contains($notes, 'sample data')
+                           || str_contains($notes, 'stock returned')   // cancel reversal
+                           || str_contains($notes, 'stock reset');     // manual reset
+                if (!$isSystemIn) {
+                    $restockCost += $qty * $unitCost;
+                }
+            }
+        }
+
+        $totalCogs       = $salesCogs + $manualCogs;
+        $grossProfit     = (float) $summary->total_revenue - $totalCogs;
+        $grossMarginPct  = $summary->total_revenue > 0
+            ? round(($grossProfit / (float) $summary->total_revenue) * 100, 1)
+            : 0;
+        $cogsPerGuest = $summary->total_guests > 0
+            ? round($totalCogs / $summary->total_guests, 2)
+            : 0;
+
         $data = [
             'periodLabel'          => $periodLabel,
             'generatedAt'          => now()->format('F j, Y \a\t g:i A'),
@@ -238,6 +347,9 @@ class ReportController extends Controller
             'extrasMap'            => $extrasMap,
             'addonsMap'            => $addonsMap,
             'totalExtrasRevenue'   => $totalExtrasRevenue,
+            'totalExtrasCost'      => $totalExtrasCost,
+            'totalExtrasProfit'    => $totalExtrasProfit,
+            'extrasMarginPct'      => $extrasMarginPct,
             'totalAddonsRevenue'   => $totalAddonsRevenue,
             // Discounts
             'discountTypes'        => $discountTypes,
@@ -249,6 +361,14 @@ class ReportController extends Controller
             'lowStockCount'        => $lowStockCount,
             'outOfStockCount'      => $outOfStockCount,
             'totalInventoryValue'  => $totalInventoryValue,
+            // P&L
+            'salesCogs'            => $salesCogs,
+            'manualCogs'           => $manualCogs,
+            'totalCogs'            => $totalCogs,
+            'restockCost'          => $restockCost,
+            'grossProfit'          => $grossProfit,
+            'grossMarginPct'       => $grossMarginPct,
+            'cogsPerGuest'         => $cogsPerGuest,
         ];
 
         return view('reports.sales', $data);

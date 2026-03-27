@@ -60,6 +60,9 @@
         @if(in_array('statistics', $allowedTabs))
             <button class="tab-btn" id="btn-statistics" onclick="switchTab('statistics')">📊 Statistics</button>
         @endif
+        @if(in_array('settings', $allowedTabs))
+            <button class="tab-btn" id="btn-settings" onclick="switchTab('settings')">⚙️ Settings</button>
+        @endif
     </div>
 
     <div class="tab-panels">
@@ -74,6 +77,9 @@
         @endif
         @if(in_array('statistics', $allowedTabs))
             <div class="tab-panel" id="tab-statistics">@livewire('statistics')</div>
+        @endif
+        @if(in_array('settings', $allowedTabs))
+            <div class="tab-panel" id="tab-settings">@livewire('settings')</div>
         @endif
     </div>
 

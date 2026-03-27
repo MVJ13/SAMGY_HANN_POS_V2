@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Order;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
@@ -12,7 +13,9 @@ class Statistics extends Component
 
     public function setHistoryTab(string $tab): void
     {
-        $this->historyTab = $tab;
+        if (in_array($tab, ['all', 'active', 'completed', 'cancelled'])) {
+            $this->historyTab = $tab;
+        }
     }
 
     // Auto-refresh whenever a new order is created from the NewOrder component
@@ -22,16 +25,34 @@ class Statistics extends Component
         // Triggering a re-render is enough — render() fetches fresh data
     }
 
+    // Refresh when an order is marked paid — revenue counts completed orders only
+    #[On('order-paid')]
+    public function refreshOnPaid(): void {}
+
+    // Refresh when an order is cancelled — keeps order history counts accurate
+    #[On('order-cancelled')]
+    public function refreshOnCancelled(): void {}
+
+    // Refresh after a factory reset — all orders wiped, stats must zero out
+    #[On('system-reset')]
+    public function refreshOnReset(): void {}
+
     public function render()
     {
-        // Order history filtered by tab
-        $allRecentOrders = Order::latest('created_at')->take(100)->get();
-        $recentOrders = $this->historyTab === 'all'
-            ? $allRecentOrders->take(50)
-            : $allRecentOrders->where('status', $this->historyTab)->take(50)->values();
+        $tz = config('app.timezone', 'Asia/Manila'); // Philippines time
 
-        // Financial totals — completed orders only (confirmed revenue)
-        $totals = Order::completed()->selectRaw('
+        // now() and today() are correct because app.php timezone = Asia/Manila
+        $todayStart = now()->startOfDay();
+        $todayEnd   = now()->endOfDay();
+
+        // Order history filtered by tab
+        $recentOrders = $this->historyTab === 'all'
+            ? Order::latest('created_at')->take(50)->get()
+            : Order::where('status', $this->historyTab)->latest('created_at')->take(50)->get();
+
+        // Financial totals — completed orders only (active = unpaid, should not count as revenue)
+        // Fix #5: Counting active orders inflated revenue with unpaid tables
+        $totals = Order::where('status', 'completed')->selectRaw('
             COUNT(*)                       AS total_orders,
             COALESCE(SUM(total), 0)        AS total_revenue,
             COALESCE(SUM(total_people), 0) AS total_customers
@@ -42,17 +63,27 @@ class Statistics extends Component
         $totalCustomers = (int)   $totals->total_customers;
         $avgOrder       = $totalOrders > 0 ? round($totalRevenue / $totalOrders, 2) : 0;
 
-        // Revenue by day (last 14 days) — completed orders only
-        $driver   = \DB::getDriverName();
-        $dateExpr = "DATE(completed_at)";
+        // ── Revenue by day (last 14 days) ──
+        // Use PHP-side bucketing to avoid DB timezone issues entirely
+        // Fetch all relevant orders and group by their PH-local date in PHP
+        $windowStart = now()->subDays(13)->startOfDay();
+        // Fix #5: completed orders only for revenue charts
+        $rawOrders = Order::where('status', 'completed')
+            ->where('created_at', '>=', $windowStart)
+            ->select('created_at', 'total')
+            ->get();
 
-        $revenueByDay = Order::completed()
-            ->where('completed_at', '>=', now()->subDays(13)->startOfDay())
-            ->selectRaw("{$dateExpr} as day, SUM(total) as revenue, COUNT(*) as orders")
-            ->groupBy('day')
-            ->orderBy('day')
-            ->get()
-            ->keyBy('day');
+        // Build a day bucket map keyed by Y-m-d in PHT
+        $dayBuckets = [];
+        foreach ($rawOrders as $order) {
+            // Parse created_at in app timezone (Asia/Manila)
+            $localDate = Carbon::parse($order->created_at)->setTimezone($tz)->format('Y-m-d');
+            if (!isset($dayBuckets[$localDate])) {
+                $dayBuckets[$localDate] = ['revenue' => 0, 'orders' => 0];
+            }
+            $dayBuckets[$localDate]['revenue'] += (float) $order->total;
+            $dayBuckets[$localDate]['orders']++;
+        }
 
         $dailyLabels  = [];
         $dailyRevenue = [];
@@ -60,41 +91,45 @@ class Statistics extends Component
         for ($i = 13; $i >= 0; $i--) {
             $date           = now()->subDays($i)->format('Y-m-d');
             $dailyLabels[]  = now()->subDays($i)->format('M j');
-            $dailyRevenue[] = $revenueByDay->has($date) ? (float) $revenueByDay[$date]->revenue : 0;
-            $dailyOrders[]  = $revenueByDay->has($date) ? (int)   $revenueByDay[$date]->orders  : 0;
+            $dailyRevenue[] = isset($dayBuckets[$date]) ? round($dayBuckets[$date]['revenue'], 2) : 0;
+            $dailyOrders[]  = isset($dayBuckets[$date]) ? $dayBuckets[$date]['orders']           : 0;
         }
 
-        // Revenue by hour today — completed orders, DB-agnostic (MySQL and SQLite)
-        $hourExpr = $driver === 'sqlite'
-            ? "CAST(strftime('%H', completed_at) AS INTEGER)"
-            : "HOUR(completed_at)";
+        // ── Revenue by hour today (PHT) ──
+        // Fetch today's orders using PHP-computed UTC range to avoid DB timezone issues
+        // Fix #5: completed orders only for today's revenue
+        $rawTodayOrders = Order::where('status', 'completed')
+            ->whereBetween('created_at', [$todayStart, $todayEnd])
+            ->select('created_at', 'total')
+            ->get();
 
-        $hourlyData = Order::completed()
-            ->whereDate('completed_at', today())
-            ->selectRaw("{$hourExpr} as hour, SUM(total) as revenue, COUNT(*) as orders")
-            ->groupBy('hour')
-            ->orderBy('hour')
-            ->get()
-            ->keyBy('hour');
+        // Bucket by PHT hour
+        $hourBuckets = [];
+        foreach ($rawTodayOrders as $order) {
+            $localHour = (int) Carbon::parse($order->created_at)->setTimezone($tz)->format('G');
+            if (!isset($hourBuckets[$localHour])) {
+                $hourBuckets[$localHour] = 0;
+            }
+            $hourBuckets[$localHour] += (float) $order->total;
+        }
 
         $hourlyLabels  = [];
         $hourlyRevenue = [];
-        for ($h = 7; $h <= 22; $h++) {
+        for ($h = 0; $h <= 23; $h++) {
             $hourlyLabels[]  = ($h % 12 ?: 12) . ($h >= 12 ? 'PM' : 'AM');
-            $hourlyRevenue[] = $hourlyData->has($h) ? (float) $hourlyData[$h]->revenue : 0;
+            $hourlyRevenue[] = isset($hourBuckets[$h]) ? round($hourBuckets[$h], 2) : 0;
         }
 
-        // Payment breakdown — completed + active orders (exclude cancelled)
-        // This ensures QRPH and Cash orders show up even before being marked paid
-        $paymentBreakdown = Order::whereIn('status', ['active', 'completed'])
+        // Fix #5: Payment breakdown — completed orders only
+        $paymentBreakdown = Order::where('status', 'completed')
             ->selectRaw("payment, COUNT(*) as cnt, SUM(total) as total")
             ->groupBy('payment')
             ->get();
 
-        // Package popularity — active + completed orders (exclude cancelled)
+        // Package popularity — completed orders only
         $packageCounts = ['Basic' => 0, 'Premium' => 0, 'Deluxe' => 0];
         Order::whereNotNull('packages')
-            ->whereIn('status', ['active', 'completed'])
+            ->where('status', 'completed')
             ->select('packages')
             ->get()
             ->each(function ($order) use (&$packageCounts) {
@@ -106,11 +141,19 @@ class Statistics extends Component
                 }
             });
 
-        // Today's stats — completed orders only (consistent with revenue figures)
-        $todayStats = Order::completed()
-            ->whereDate('completed_at', today())
-            ->selectRaw('COUNT(*) as orders, COALESCE(SUM(total),0) as revenue, COALESCE(SUM(total_people),0) as customers')
-            ->first();
+        // Today's KPI stats — use same PHT window
+        $todayOrderCount    = count($rawTodayOrders);
+        $todayRevenue       = round($rawTodayOrders->sum('total'), 2);
+
+        $todayGuestRaw = Order::where('status', 'completed')
+            ->whereBetween('created_at', [$todayStart, $todayEnd])
+            ->sum('total_people');
+
+        $todayStats = (object) [
+            'orders'    => $todayOrderCount,
+            'revenue'   => $todayRevenue,
+            'customers' => (int) $todayGuestRaw,
+        ];
 
         // Active (unpaid) count for context
         $activeOrdersCount = Order::active()->count();

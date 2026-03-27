@@ -50,8 +50,8 @@ class User extends Authenticatable
     public function allowedTabs(): array
     {
         return match ($this->role) {
-            'super_admin' => ['orders', 'receipts', 'inventory', 'statistics'],
-            'admin'       => ['inventory', 'statistics'],
+            'super_admin' => ['orders', 'receipts', 'inventory', 'statistics', 'settings'],
+            'admin'       => ['inventory', 'statistics', 'settings'],
             'cashier'     => ['orders', 'receipts'],
             default       => [],
         };

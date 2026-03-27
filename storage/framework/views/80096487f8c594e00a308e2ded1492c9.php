@@ -11,703 +11,600 @@
 
         body {
             font-family: 'Inter', Arial, sans-serif;
-            font-size: 15px;
+            font-size: 14px;
             color: #111827;
-            background: #e5e7eb;
-            line-height: 1.6;
+            background: #F3F4F6;
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ══ TOOLBAR ══ */
+        /* ══ TOOLBAR (screen only) ══ */
         .toolbar {
-            background: #111827; padding: 16px 48px;
+            background: #1F2937;
+            padding: 12px 32px;
             display: flex; align-items: center; justify-content: space-between;
             position: sticky; top: 0; z-index: 100; gap: 16px;
+            border-bottom: 3px solid #D4451A;
         }
-        .toolbar-title { font-size: 15px; font-weight: 600; color: #d1d5db; }
+        .toolbar-title { font-size: 14px; font-weight: 600; color: #D1D5DB; }
+        .toolbar-title strong { color: #FFFFFF; }
         .btn-print {
-            background: #dc2626; color: #fff; border: none;
-            padding: 10px 24px; border-radius: 8px; font-size: 14px;
-            font-weight: 700; cursor: pointer;
+            background: #D4451A; color: #fff; border: none;
+            padding: 9px 24px; border-radius: 6px; font-size: 13px;
+            font-weight: 700; cursor: pointer; font-family: inherit;
+            display: flex; align-items: center; gap: 6px;
         }
-        .btn-print:hover { background: #b91c1c; }
+        .btn-print:hover { background: #A83614; }
 
         /* ══ WRAPPER ══ */
         .wrap {
-            max-width: 1060px; margin: 32px auto 56px;
-            background: #fff; border-radius: 14px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.12); overflow: hidden;
+            max-width: 1060px; margin: 24px auto 56px;
+            background: #fff;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
         }
 
         /* ══ REPORT HEADER ══ */
         .rh {
-            background: linear-gradient(135deg, #7f1d1d 0%, #dc2626 55%, #ea580c 100%);
-            color: #fff; padding: 36px 48px 30px;
+            background: #1F2937;
+            color: #fff;
+            padding: 24px 32px 20px;
+            border-bottom: 3px solid #D4451A;
         }
-        .rh-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
-        .rh-brand { display: flex; align-items: center; gap: 16px; }
+        .rh-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+        .rh-brand { display: flex; align-items: center; gap: 12px; }
         .rh-logo {
-            height: 60px; width: 60px; border-radius: 12px;
-            background: rgba(255,255,255,0.2); object-fit: contain; padding: 4px;
+            height: 48px; width: 48px; border-radius: 8px;
+            object-fit: contain; padding: 3px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        .rh-name    { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
-        .rh-sub     { font-size: 12px; opacity: 0.75; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
-        .rh-meta    { text-align: right; font-size: 13px; opacity: 0.85; line-height: 2.1; }
-        .rh-period  {
-            margin-top: 22px; padding-top: 18px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-size: 20px; font-weight: 800;
-        }
+        .rh-name { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+        .rh-sub  { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; letter-spacing: 0.8px; text-transform: uppercase; }
+        .rh-meta { text-align: right; font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.8; }
+        .rh-meta strong { color: #fff; }
 
-        /* ══ TOC ══ */
-        .toc {
-            display: flex; flex-wrap: wrap; gap: 8px;
-            padding: 20px 48px; background: #f9fafb; border-bottom: 1px solid #e5e7eb;
+        .rh-period-band {
+            margin-top: 16px; padding: 10px 14px;
+            background: rgba(212,69,26,0.15);
+            border: 1px solid rgba(212,69,26,0.3);
+            border-radius: 6px;
+            display: flex; gap: 28px; align-items: center; flex-wrap: wrap;
         }
-        .toc a {
-            font-size: 13px; font-weight: 600; padding: 6px 16px;
-            border-radius: 20px; background: #fff; color: #374151;
-            text-decoration: none; border: 1.5px solid #d1d5db; transition: all 0.15s;
-        }
-        .toc a:hover { background: #dc2626; color: #fff; border-color: #dc2626; }
+        .rh-period-item { display: flex; flex-direction: column; gap: 1px; }
+        .rh-period-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #FCA571; }
+        .rh-period-val { font-size: 13px; font-weight: 700; color: #fff; }
 
         /* ══ SECTION TITLE ══ */
         .stitle {
-            font-size: 11px; font-weight: 800; letter-spacing: 2px;
-            text-transform: uppercase; color: #dc2626;
-            margin: 40px 48px 20px; padding-bottom: 12px;
-            border-bottom: 2px solid #fee2e2;
-            display: flex; align-items: center; gap: 12px;
+            font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+            text-transform: uppercase; color: #fff;
+            padding: 9px 32px 9px 14px;
+            background: #374151;
+            display: flex; align-items: center; gap: 10px;
+            border-top: 1px solid #4B5563;
+            border-bottom: 1px solid #4B5563;
         }
-        .stitle-bar {
-            display: inline-block; width: 5px; height: 20px;
-            background: #dc2626; border-radius: 3px; flex-shrink: 0;
+        .stitle-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: #D4451A; color: #fff;
+            font-size: 10px; font-weight: 800; flex-shrink: 0;
+        }
+        .stitle-sub {
+            margin-left: auto; font-size: 10px; font-weight: 500;
+            color: rgba(255,255,255,0.4); text-transform: none; letter-spacing: 0;
         }
 
+        /* ══ SECTION BODY ══ */
+        .sbody { padding: 20px 32px 22px; }
+
+        /* ══ CALLOUT ══ */
+        .callout {
+            background: #FFFBEB; border: 1px solid #FCD34D;
+            border-radius: 6px; padding: 12px 16px;
+            font-size: 13px; color: #78350F; line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .callout strong { color: #92400E; }
+
         /* ══ KPI GRID ══ */
-        .kpis {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 14px; margin: 0 48px;
-        }
-        /* Summary section has 7 cards — force single row */
-        .kpis.kpis-7 {
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-        }
-        .kpis.kpis-7 .kpi {
-            padding: 16px 8px;
-        }
-        .kpis.kpis-7 .kpi-val {
-            font-size: 20px;
-        }
-        .kpis.kpis-7 .kpi-val.kpi-val--lg { font-size: 16px; }
-        .kpis.kpis-7 .kpi-val.kpi-val--xl { font-size: 13px; }
+        .kpis { display: grid; gap: 10px; margin-bottom: 14px; }
+        .kpis-2 { grid-template-columns: repeat(2, 1fr); }
+        .kpis-3 { grid-template-columns: repeat(3, 1fr); }
+        .kpis-4 { grid-template-columns: repeat(4, 1fr); }
+        .kpis-5 { grid-template-columns: repeat(5, 1fr); }
+
         .kpi {
-            background: #f9fafb; border: 2px solid #e5e7eb;
-            border-radius: 12px; padding: 20px 14px; text-align: center;
+            background: #F9FAFB; border: 1.5px solid #E5E7EB;
+            border-radius: 8px; padding: 14px 12px; text-align: center;
             min-width: 0;
         }
-        .kpi-lbl {
-            font-size: 10.5px; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.7px; color: #9ca3af; margin-bottom: 10px;
-            line-height: 1.3;
-        }
-        .kpi-val  { font-size: 28px; font-weight: 900; color: #111827; line-height: 1.1; word-break: break-word; overflow-wrap: break-word; }
-        .kpi-val.kpi-val--lg { font-size: 21px; }
-        .kpi-val.kpi-val--xl { font-size: 16px; }
-        .kpi-hint { font-size: 12px; color: #9ca3af; margin-top: 5px; }
-        .green  { color: #16a34a; }
-        .red    { color: #dc2626; }
-        .orange { color: #ea580c; }
-        .blue   { color: #2563eb; }
-        .purple { color: #7c3aed; }
+        .kpi-lbl  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280; margin-bottom: 6px; line-height: 1.3; }
+        .kpi-val  { font-size: 26px; font-weight: 800; color: #111827; line-height: 1; word-break: break-all; }
+        .kpi-val--lg { font-size: 18px; }
+        .kpi-val--xl { font-size: 14px; }
+        .kpi-hint { font-size: 11px; color: #9CA3AF; margin-top: 4px; }
+
+        /* ══ COLOUR UTILITIES ══ */
+        .c-green  { color: #166534; }
+        .c-red    { color: #991B1B; }
+        .c-orange { color: #92400E; }
+        .c-blue   { color: #1E3A8A; }
+        .c-amber  { color: #92400E; }
+        .c-muted  { color: #6B7280; }
 
         /* ══ NO DATA ══ */
         .nodata {
-            margin: 0 48px 24px; padding: 44px; text-align: center;
-            background: #f9fafb; border: 2px dashed #d1d5db;
-            border-radius: 12px; color: #9ca3af; font-size: 15px;
+            padding: 28px; text-align: center;
+            background: #F9FAFB; border: 1.5px dashed #D1D5DB;
+            border-radius: 6px; color: #6B7280; font-size: 13px;
         }
+        .nodata-icon { font-size: 1.8em; margin-bottom: 6px; }
 
         /* ══ TABLES ══ */
-        .twrap { margin: 0 48px; border-radius: 10px; overflow: hidden; border: 1.5px solid #e5e7eb; }
-        table  { width: 100%; border-collapse: collapse; font-size: 14px; }
-        thead tr { background: #1f2937; }
+        .twrap { border-radius: 6px; overflow: hidden; border: 1.5px solid #E5E7EB; }
+        .twrap + .twrap { margin-top: 12px; }
+        table  { width: 100%; border-collapse: collapse; font-size: 13px; }
+        thead tr { background: #1F2937; }
         th {
-            color: #e5e7eb; padding: 13px 16px;
-            text-align: left; font-size: 11px; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;
+            color: #E5E7EB; padding: 10px 12px;
+            text-align: left; font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
         }
         th.r, td.r { text-align: right; }
         th.c, td.c { text-align: center; }
-        td { padding: 13px 16px; border-bottom: 1px solid #f3f4f6; color: #374151; vertical-align: middle; }
+        td { padding: 10px 12px; border-bottom: 1px solid #F3F4F6; color: #374151; vertical-align: middle; font-size: 13px; }
         tbody tr:last-child td { border-bottom: none; }
-        tbody tr:nth-child(even) td { background: #f9fafb; }
-        tbody tr:hover td { background: #f0f9ff !important; }
+        tbody tr:nth-child(even) td { background: #F9FAFB; }
+        tbody tr:hover td { background: #FEF3C7 !important; }
 
-        .tn  { font-weight: 700; color: #111827; font-size: 14px; }
-        .tm  { color: #9ca3af; font-size: 13px; }
-        .tg  { font-weight: 700; color: #16a34a; }
-        .tr  { font-weight: 700; color: #dc2626; }
-        .to  { font-weight: 700; color: #ea580c; }
+        .tn  { font-weight: 700; color: #111827; }
+        .tm  { color: #6B7280; font-size: 12px; }
+        .tg  { font-weight: 700; color: #166534; }
+        .tr  { font-weight: 700; color: #991B1B; }
+        .to  { font-weight: 700; color: #92400E; }
         .tb  { font-weight: 700; color: #111827; }
+
+        /* ══ TFOOT ══ */
+        tfoot tr td {
+            background: #1F2937 !important; color: #F9FAFB !important;
+            font-weight: 700 !important; font-size: 12px !important;
+            padding: 10px 12px !important; border-bottom: none !important;
+        }
+        tfoot .tot-label { color: rgba(255,255,255,0.4) !important; font-size: 9px !important; text-transform: uppercase; letter-spacing: 0.8px; }
+        tfoot .tot-hi    { color: #6EE7B7 !important; font-size: 13px !important; font-weight: 800 !important; }
+        tfoot .tot-amber { color: #FCD34D !important; }
 
         /* ══ BADGES ══ */
         .badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 4px 12px; border-radius: 20px;
-            font-size: 12px; font-weight: 700; white-space: nowrap;
+            display: inline-flex; align-items: center; gap: 3px;
+            padding: 2px 8px; border-radius: 20px;
+            font-size: 11px; font-weight: 700; white-space: nowrap;
         }
-        .b-cash { background: #dcfce7; color: #166534; }
-        .b-qr   { background: #dbeafe; color: #1e40af; }
-        .b-in   { background: #dcfce7; color: #166534; }
-        .b-out  { background: #fee2e2; color: #991b1b; }
-        .b-same { background: #f3f4f6; color: #6b7280; }
-        .b-low  { background: #fef9c3; color: #854d0e; }
-        .b-ok   { background: #dcfce7; color: #166534; }
-        .b-zero { background: #fee2e2; color: #991b1b; }
+        .b-cash  { background: #DCFCE7; color: #166534; }
+        .b-qr    { background: #DBEAFE; color: #1E40AF; }
+        .b-low   { background: #FEF9C3; color: #854D0E; }
+        .b-ok    { background: #DCFCE7; color: #166534; }
+        .b-zero  { background: #FEE2E2; color: #991B1B; }
 
-        /* ══ TWO COL ══ */
-        .twocol { display: flex; gap: 24px; margin: 0 48px; }
-        .twocol > div { flex: 1; min-width: 0; }
-        .col-head {
-            font-size: 12px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 1px; color: #6b7280;
-            padding-bottom: 10px; margin-bottom: 12px;
-            border-bottom: 2px solid #e5e7eb;
-            display: flex; justify-content: space-between; align-items: center;
+        /* ══ TWO-COL LAYOUT ══ */
+        .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .col-title {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #6B7280;
+            padding-bottom: 8px; margin-bottom: 10px;
+            border-bottom: 1.5px solid #E5E7EB;
         }
+        .col-title strong { color: #166534; margin-left: 6px; }
 
         /* ══ PACKAGE BARS ══ */
-        .pkg-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-        .pkg-lbl { font-size: 14px; font-weight: 700; width: 76px; color: #374151; }
-        .pkg-bar-bg { flex: 1; height: 18px; background: #f3f4f6; border-radius: 9px; overflow: hidden; }
-        .pkg-bar    { height: 100%; border-radius: 9px; }
-        .pb-basic   { background: #dc2626; }
-        .pb-premium { background: #ea580c; }
-        .pb-deluxe  { background: #d97706; }
-        .pkg-ct { font-size: 13px; font-weight: 700; color: #374151; width: 64px; text-align: right; }
+        .pkg-box { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 6px; padding: 14px 16px; }
+        .pkg-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .pkg-row:last-child { margin-bottom: 0; }
+        .pkg-lbl { font-size: 13px; font-weight: 600; width: 64px; color: #374151; flex-shrink: 0; }
+        .pkg-bar-bg { flex: 1; height: 14px; background: #E5E7EB; border-radius: 6px; overflow: hidden; }
+        .pkg-bar { height: 100%; border-radius: 6px; }
+        .pb-basic   { background: #D4451A; }
+        .pb-premium { background: #D97706; }
+        .pb-deluxe  { background: #1D4ED8; }
+        .pkg-ct { font-size: 12px; font-weight: 700; color: #374151; width: 54px; text-align: right; flex-shrink: 0; }
 
         /* ══ PEAK HOURS ══ */
-        .peak-banner {
-            display: inline-flex; align-items: center; gap: 10px;
-            background: #fef2f2; color: #dc2626;
-            font-size: 14px; font-weight: 700;
-            padding: 10px 20px; border-radius: 10px;
-            border: 2px solid #fecaca; margin: 0 48px 20px;
+        .peak-highlight {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #FEF3C7; color: #78350F;
+            font-size: 13px; font-weight: 700;
+            padding: 10px 16px; border-radius: 6px;
+            border: 1px solid #FCD34D; margin-bottom: 14px;
         }
-        .peak-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
-            gap: 8px; margin: 0 48px 24px; align-items: end;
-        }
-        .peak-col   { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .peak-bwrap { width: 100%; height: 100px; display: flex; align-items: flex-end; }
-        .peak-b     { width: 100%; border-radius: 6px 6px 0 0; min-height: 5px; }
-        .pk-top  { background: #dc2626; }
-        .pk-high { background: #ea580c; }
-        .pk-mid  { background: #fbbf24; }
-        .pk-low  { background: #d1d5db; }
-        .peak-lbl { font-size: 11px; color: #6b7280; text-align: center; white-space: nowrap; }
-        .peak-ct  { font-size: 11px; font-weight: 700; color: #374151; }
 
-        /* ══ EXTRAS ══ */
-        .ext-row {
-            display: flex; align-items: center; gap: 14px;
-            padding: 11px 0; border-bottom: 1px solid #f3f4f6;
-        }
+        /* ══ EXTRAS ROWS ══ */
+        .ext-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F3F4F6; }
         .ext-row:last-child { border-bottom: none; }
-        .ext-rank { width: 24px; font-size: 12px; font-weight: 700; color: #9ca3af; flex-shrink: 0; text-align: center; }
-        .ext-name { flex: 1; font-size: 14px; font-weight: 600; color: #111827; }
-        .ext-bwrap { width: 140px; height: 10px; background: #f3f4f6; border-radius: 5px; overflow: hidden; flex-shrink: 0; }
-        .ext-bar   { height: 100%; border-radius: 5px; }
-        .eb-red  { background: #dc2626; }
-        .eb-blue { background: #2563eb; }
-        .ext-qty { font-size: 13px; color: #9ca3af; width: 48px; text-align: right; flex-shrink: 0; }
-        .ext-rev { font-size: 14px; font-weight: 700; color: #111827; width: 90px; text-align: right; flex-shrink: 0; }
-        .ext-empty { padding: 24px 0; text-align: center; color: #9ca3af; font-size: 14px; }
+        .ext-rank  { width: 18px; font-size: 10px; font-weight: 700; color: #9CA3AF; flex-shrink: 0; text-align: center; }
+        .ext-name  { flex: 1; font-size: 13px; font-weight: 600; color: #111827; }
+        .ext-bwrap { width: 100px; height: 6px; background: #E5E7EB; border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+        .ext-bar   { height: 100%; border-radius: 4px; background: #D4451A; }
+        .ext-qty   { font-size: 11px; color: #9CA3AF; width: 34px; text-align: right; flex-shrink: 0; }
+        .ext-rev   { font-size: 13px; font-weight: 700; color: #111827; width: 76px; text-align: right; flex-shrink: 0; }
+        .ext-box   { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 6px; padding: 12px 14px; min-height: 60px; }
 
         /* ══ DISCOUNT CARDS ══ */
-        .disc-grid { display: flex; gap: 16px; margin: 0 48px; flex-wrap: wrap; }
-        .disc-card {
-            flex: 1; min-width: 170px;
-            background: #f9fafb; border: 2px solid #e5e7eb;
-            border-radius: 12px; padding: 22px 20px;
-        }
-        .disc-emoji  { font-size: 32px; margin-bottom: 10px; }
-        .disc-type   { font-size: 13px; font-weight: 700; color: #6b7280; margin-bottom: 10px; }
-        .disc-count  { font-size: 36px; font-weight: 900; line-height: 1; }
-        .disc-amount { font-size: 14px; color: #6b7280; margin-top: 8px; font-weight: 500; }
-        .disc-pct    { font-size: 12px; color: #9ca3af; margin-top: 4px; }
-        .disc-note {
-            margin: 18px 48px 0;
-            padding: 16px 20px;
-            background: #fffbeb; border: 2px solid #fde68a;
-            border-radius: 10px; font-size: 13px; color: #92400e; line-height: 1.8;
-        }
+        .disc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+        .disc-card { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 6px; padding: 14px 12px; }
+        .disc-emoji  { font-size: 22px; margin-bottom: 6px; }
+        .disc-type   { font-size: 10px; font-weight: 700; color: #6B7280; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .disc-count  { font-size: 28px; font-weight: 800; line-height: 1; color: #111827; }
+        .disc-amount { font-size: 12px; color: #6B7280; margin-top: 5px; font-weight: 600; }
+        .disc-pct    { font-size: 10px; color: #9CA3AF; margin-top: 2px; }
 
-        /* ══ STOCK CARDS (the big change) ══ */
-        .cat-head {
-            font-size: 13px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 1.5px; color: #6b7280;
-            margin: 20px 48px 12px; padding: 0;
+        /* ══ P&L SECTION ══ */
+        .pnl-verdict {
+            display: flex; align-items: center; gap: 16px;
+            padding: 16px 20px; border-radius: 6px;
+            margin-bottom: 14px; border: 1.5px solid;
         }
-        .cat-head:first-of-type,
-        .stitle + .kpis + div .cat-head:first-child,
-        .kpis + .cat-head {
-            margin-top: 0;
+        .pnl-verdict-gain { background: #F0FDF4; border-color: #86EFAC; }
+        .pnl-verdict-loss { background: #FEF2F2; border-color: #FCA5A5; }
+        .pnl-verdict-icon { font-size: 28px; flex-shrink: 0; }
+        .pnl-verdict-body { flex: 1; }
+        .pnl-verdict-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: #374151; }
+        .pnl-verdict-amount { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+        .pnl-verdict-gain .pnl-verdict-amount { color: #166534; }
+        .pnl-verdict-loss .pnl-verdict-amount { color: #991B1B; }
+        .pnl-verdict-sub { font-size: 12px; color: #6B7280; }
+        .pnl-verdict-sub strong { color: #374151; }
+        .pnl-verdict-margin { flex-shrink: 0; }
+        .pnl-verdict-margin-ring {
+            width: 64px; height: 64px; border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 3px solid; font-weight: 800;
         }
-        .stock-cards { display: flex; flex-direction: column; gap: 10px; margin: 0 48px 28px; }
-        .stock-card {
-            display: grid;
-            grid-template-columns: 1fr 160px 40px 160px 120px 130px;
-            align-items: center; gap: 0;
-            background: #fff; border: 2px solid #e5e7eb;
-            border-radius: 12px; overflow: hidden;
-        }
-        .stock-card:hover { border-color: #93c5fd; }
-        .sc-name {
-            padding: 16px 20px;
-            font-size: 15px; font-weight: 700; color: #111827;
-        }
-        .sc-name span { display: block; font-size: 12px; font-weight: 500; color: #9ca3af; margin-top: 2px; }
-        .sc-open {
-            padding: 16px 20px; text-align: right;
-            background: #f0fdf4; border-left: 1px solid #e5e7eb;
-        }
-        .sc-open-lbl  { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #16a34a; margin-bottom: 4px; }
-        .sc-open-val  { font-size: 22px; font-weight: 800; color: #15803d; line-height: 1; }
-        .sc-open-unit { font-size: 12px; color: #6b7280; margin-top: 3px; }
-        .sc-arrow {
-            padding: 16px 0; text-align: center;
-            font-size: 22px; color: #9ca3af; background: #f9fafb;
-            border-left: 1px solid #e5e7eb;
-        }
-        .sc-close {
-            padding: 16px 20px; text-align: right;
-            background: #eff6ff; border-left: 1px solid #e5e7eb;
-        }
-        .sc-close-lbl  { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #2563eb; margin-bottom: 4px; }
-        .sc-close-val  { font-size: 22px; font-weight: 800; color: #1d4ed8; line-height: 1; }
-        .sc-close-unit { font-size: 12px; color: #6b7280; margin-top: 3px; }
-        .sc-change {
-            padding: 16px 14px; text-align: center;
-            border-left: 1px solid #e5e7eb; background: #f9fafb;
-        }
-        .sc-change-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #9ca3af; margin-bottom: 6px; }
-        .sc-change-val { font-size: 18px; font-weight: 800; line-height: 1; }
-        .sc-status {
-            padding: 16px 14px; text-align: center;
-            border-left: 1px solid #e5e7eb;
-        }
-        /* dimmed = no movement */
-        .stock-card.dimmed { opacity: 0.5; }
+        .pnl-verdict-margin-ring span { font-size: 16px; line-height: 1; }
+        .pnl-verdict-margin-ring small { font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+        .ring-good { border-color: #16A34A; color: #166534; background: #DCFCE7; }
+        .ring-ok   { border-color: #D97706; color: #92400E; background: #FEF9C3; }
+        .ring-bad  { border-color: #DC2626; color: #991B1B; background: #FEE2E2; }
 
-        /* ══ TOTALS ROW ══ */
-        tfoot tr td {
-            background: #1f2937 !important;
-            color: #f9fafb !important;
-            font-weight: 800 !important;
-            font-size: 13px !important;
-            padding: 13px 16px !important;
-            border-bottom: none !important;
+        .pnl-banner {
+            display: flex; align-items: stretch; gap: 0;
+            background: #F9FAFB; border: 1px solid #E5E7EB;
+            border-radius: 8px; overflow: hidden; margin-bottom: 14px;
         }
-        tfoot tr td.tot-label { color: #9ca3af !important; font-size: 10px !important; letter-spacing: 1px; text-transform: uppercase; font-weight: 700 !important; }
-        tfoot tr td.tot-hi    { color: #4ade80 !important; font-size: 15px !important; }
-        tfoot tr td.tot-warn  { color: #fbbf24 !important; }
+        .pnl-col { flex: 1; padding: 18px 16px; text-align: center; border-right: 1px solid #E5E7EB; }
+        .pnl-col:last-child { border-right: none; }
+        .pnl-col-profit-pos { background: #F0FDF4; border-left: 1px solid #BBF7D0; }
+        .pnl-col-profit-neg { background: #FEF2F2; border-left: 1px solid #FECACA; }
+        .pnl-col-icon  { font-size: 20px; margin-bottom: 5px; }
+        .pnl-col-lbl   { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #6B7280; margin-bottom: 6px; }
+        .pnl-col-val   { font-size: 20px; font-weight: 800; line-height: 1; margin-bottom: 5px; word-break: break-all; }
+        .pnl-col-hint  { font-size: 11px; color: #6B7280; }
+        .pnl-minus, .pnl-equals { font-size: 24px; font-weight: 700; color: #9CA3AF; padding: 0 6px; flex-shrink: 0; align-self: center; }
+        .pnl-green  { color: #166534; }
+        .pnl-red    { color: #991B1B; }
+        .pnl-orange { color: #92400E; }
+        .pnl-blue   { color: #1E3A8A; }
+        .pnl-margin-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .pnl-badge-good { background: #DCFCE7; color: #166534; }
+        .pnl-badge-ok   { background: #FEF9C3; color: #854D0E; }
+        .pnl-badge-warn { background: #FEE2E2; color: #991B1B; }
 
-        /* ══ INVENTORY TABLE ══ */
-        .inv-stock-val { font-size: 16px; font-weight: 800; }
+        .pnl-breakdown { border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden; }
+        .pnl-row { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid #F3F4F6; background: #fff; }
+        .pnl-row:last-child { border-bottom: none; }
+        .pnl-row:nth-child(even) { background: #F9FAFB; }
+        .pnl-row-restock { background: #EFF6FF !important; border-bottom-color: #BFDBFE !important; }
+        .pnl-row-total { background: #1F2937 !important; }
+        .pnl-row-total .pnl-row-title { color: #F9FAFB !important; }
+        .pnl-row-total .pnl-row-desc  { color: rgba(255,255,255,0.5) !important; }
+        .pnl-row-icon  { font-size: 16px; flex-shrink: 0; width: 24px; text-align: center; }
+        .pnl-row-label { flex: 1; }
+        .pnl-row-title { font-size: 13px; font-weight: 600; color: #111827; }
+        .pnl-row-desc  { font-size: 11px; color: #6B7280; margin-top: 2px; line-height: 1.4; }
+        .pnl-row-val   { font-size: 14px; font-weight: 700; white-space: nowrap; flex-shrink: 0; min-width: 110px; text-align: right; }
+
+        /* ══ GRAND TOTAL PANEL ══ */
+        .grand-panel { background: #1F2937; border-radius: 8px; overflow: hidden; }
+        .grand-panel-head {
+            background: #374151; padding: 8px 18px;
+            font-size: 9px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1.5px; color: rgba(255,255,255,0.5);
+        }
+        .grand-panel-body { display: grid; grid-template-columns: repeat(4, 1fr); }
+        .grand-cell { padding: 14px 16px; border-right: 1px solid rgba(255,255,255,0.06); }
+        .grand-cell:last-child { border-right: none; background: rgba(212,69,26,0.15); }
+        .grand-cell-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+        .grand-cell-val { font-size: 22px; font-weight: 800; color: #fff; line-height: 1; word-break: break-all; }
+        .grand-cell:last-child .grand-cell-lbl { color: #FCA571; }
+        .grand-cell:last-child .grand-cell-val { color: #FCD34D; }
+        .grand-cell-sub { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 3px; }
+
+        /* ══ SIGNATURE BLOCK ══ */
+        .sig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .sig-line { margin-top: 32px; border-top: 1px solid #D1D5DB; padding-top: 6px; }
+        .sig-name { font-size: 12px; font-weight: 600; color: #111827; }
+        .sig-role { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #6B7280; margin-top: 2px; }
 
         /* ══ FOOTER ══ */
         .rfooter {
-            margin-top: 40px; padding: 20px 48px;
-            background: #f9fafb; border-top: 2px solid #e5e7eb;
+            padding: 12px 32px;
+            background: #F9FAFB; border-top: 1px solid #E5E7EB;
             display: flex; justify-content: space-between; align-items: center;
-            font-size: 13px; color: #9ca3af;
+            font-size: 12px; color: #374151;
         }
-        .spacer { height: 32px; }
+
+        /* ══ MISC ══ */
+        .section-divider { height: 8px; background: #F3F4F6; border-top: 1px solid #E5E7EB; border-bottom: 1px solid #E5E7EB; }
+        .spacer { height: 20px; }
+        .pgfooter { display: none; }
         .screen-only { display: block; }
         .print-only  { display: none; }
+        .cat-row td {
+            background: #F3F4F6 !important; font-weight: 700 !important;
+            font-size: 10px !important; text-transform: uppercase !important;
+            letter-spacing: 0.8px !important; color: #374151 !important;
+            padding: 6px 12px !important;
+        }
 
-        /* ══ PRINT ══ */
-        /*
-         * Standard business report: A4, 15mm margins, 10pt body, 8pt labels.
-         * All screen decorations (gradients, shadows, rounded corners, hover
-         * states, large KPI numbers) are stripped. Content is compact but
-         * completely readable at arm's length.
-         */
+        /* ══════════════════════════════════════════════
+           PRINT STYLES — optimised for A4, black ink
+           Works on: inkjet, laser, B&W, thermal A4
+        ═══════════════════════════════════════════════ */
         @media print {
-
             @page {
                 size: A4 portrait;
-                margin: 15mm 15mm 20mm 15mm;
+                margin: 15mm 14mm 20mm 14mm;
             }
 
-            /* ── Reset & base ── */
+            /* Force black ink, show backgrounds */
             *, *::before, *::after {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                box-shadow: none !important;
-                text-shadow: none !important;
             }
 
             html, body {
                 background: #fff !important;
                 font-family: Arial, Helvetica, sans-serif !important;
-                font-size: 10pt !important;
-                line-height: 1.4 !important;
+                font-size: 9pt !important;
                 color: #000 !important;
+                line-height: 1.35 !important;
             }
-            body { position: relative !important; }
 
-            /* ── Hide screen-only chrome ── */
-            .toolbar, .toc { display: none !important; }
-
-            /* ── Screen vs Print visibility ── */
+            /* Hide screen-only elements */
+            .toolbar  { display: none !important; }
             .screen-only { display: none !important; }
             .print-only  { display: block !important; }
 
-            /* ── Hide the bar chart (peak hours visual) — wastes half a page ── */
-            .peak-grid { display: none !important; }
-
-
-
-
+            /* Wrapper — full width, no shadow */
             .wrap {
                 margin: 0 !important;
-                padding: 0 !important;
+                max-width: 100% !important;
                 box-shadow: none !important;
                 border-radius: 0 !important;
-                max-width: 100% !important;
+                border: none !important;
                 overflow: visible !important;
-                background: #fff !important;
             }
 
-            /* ── Report header ── */
+            /* ── REPORT HEADER ── */
             .rh {
-                background: #1a1a2e !important;
-                color: #fff !important;
-                padding: 10pt 12pt 8pt !important;
-                margin-bottom: 8pt !important;
+                background: #1F2937 !important;
+                padding: 10pt 14pt !important;
                 break-inside: avoid !important;
-                page-break-inside: avoid !important;
-            }
-            .rh-name   { font-size: 16pt !important; font-weight: bold !important; }
-            .rh-sub    { font-size: 8pt !important; opacity: 0.8 !important; }
-            .rh-meta   { font-size: 8pt !important; line-height: 1.6 !important; text-align: right !important; }
-            .rh-logo   { height: 36pt !important; width: 36pt !important; }
-            .rh-period { font-size: 11pt !important; font-weight: bold !important; margin-top: 6pt !important; padding-top: 6pt !important; border-top: 1pt solid rgba(255,255,255,0.3) !important; }
-            .rh > div:last-child { font-size: 8pt !important; margin-top: 6pt !important; padding-top: 6pt !important; gap: 24pt !important; }
-
-            /* ── Section titles ── */
-            .stitle {
-                font-size: 8pt !important;
-                font-weight: bold !important;
-                text-transform: uppercase !important;
-                letter-spacing: 1pt !important;
-                color: #000 !important;
-                margin: 10pt 0 5pt !important;
-                padding-bottom: 3pt !important;
-                border-bottom: 1pt solid #000 !important;
                 break-after: avoid !important;
-                page-break-after: avoid !important;
             }
-            .stitle-bar { display: none !important; }
+            .rh-name  { font-size: 14pt !important; }
+            .rh-sub   { font-size: 7pt !important; }
+            .rh-meta  { font-size: 7.5pt !important; line-height: 1.7 !important; }
+            .rh-logo  { height: 32pt !important; width: 32pt !important; }
+            .rh-period-band {
+                padding: 6pt 10pt !important;
+                margin-top: 8pt !important;
+                gap: 18pt !important;
+            }
+            .rh-period-lbl { font-size: 6.5pt !important; }
+            .rh-period-val { font-size: 9.5pt !important; }
 
-            /* ── Global margin reset (screen uses 48px side gutters) ── */
-            .stitle, .kpis, .twocol, .twrap, .disc-grid, .peak-grid,
-            .peak-banner, .disc-note, .cat-head, .stock-cards, .nodata,
-            .inv-grand-total, .rfooter {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
+            /* ── SECTION TITLES ── */
+            .stitle {
+                background: #374151 !important;
+                padding: 5pt 14pt 5pt 10pt !important;
+                font-size: 7pt !important;
+                break-after: avoid !important;
+                break-before: auto !important;
             }
+            .stitle-num { width: 13pt !important; height: 13pt !important; font-size: 7pt !important; background: #D4451A !important; }
 
-            /* ── KPI cards ── */
-            .kpis {
-                display: grid !important;
-                grid-template-columns: repeat(4, 1fr) !important;
-                gap: 4pt !important;
-                margin-bottom: 6pt !important;
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-            }
-            .kpis.kpis-7 { grid-template-columns: repeat(7, 1fr) !important; }
+            /* ── SECTION BODY ── */
+            .sbody { padding: 8pt 12pt 10pt !important; }
+            .section-divider { height: 0 !important; border-top: 0.5pt solid #E5E7EB !important; }
+            .spacer { height: 3pt !important; }
+
+            /* ── KPIs ── */
+            .kpis { gap: 4pt !important; margin-bottom: 8pt !important; break-inside: avoid !important; }
+            .kpis-4 { grid-template-columns: repeat(4, 1fr) !important; }
+            .kpis-3 { grid-template-columns: repeat(3, 1fr) !important; }
+            .kpis-2 { grid-template-columns: repeat(2, 1fr) !important; }
             .kpi {
-                background: #f4f4f4 !important;
-                border: 0.5pt solid #ccc !important;
-                border-radius: 0 !important;
                 padding: 5pt 4pt !important;
+                border-radius: 0 !important;
+                border: 0.5pt solid #D1D5DB !important;
+                background: #F9FAFB !important;
                 text-align: center !important;
                 break-inside: avoid !important;
             }
-            .kpi-lbl  { font-size: 6.5pt !important; font-weight: bold !important; color: #555 !important; margin-bottom: 2pt !important; letter-spacing: 0 !important; }
-            .kpi-val  { font-size: 13pt !important; font-weight: bold !important; color: #000 !important; line-height: 1.1 !important; }
-            .kpis-7 .kpi-val { font-size: 10pt !important; }
-            .kpi-val--lg { font-size: 9pt !important; }
+            .kpi-lbl  { font-size: 6pt !important; margin-bottom: 2pt !important; color: #6B7280 !important; letter-spacing: 0 !important; }
+            .kpi-val  { font-size: 13pt !important; font-weight: bold !important; color: #000 !important; }
+            .kpi-val--lg { font-size: 10pt !important; }
             .kpi-val--xl { font-size: 8pt !important; }
-            .kpi-hint { font-size: 7pt !important; color: #666 !important; }
+            .kpi-hint { font-size: 6pt !important; color: #6B7280 !important; }
+            .c-green  { color: #166534 !important; }
+            .c-red    { color: #991B1B !important; }
+            .c-orange { color: #92400E !important; }
+            .c-blue   { color: #1E3A8A !important; }
+            .c-amber  { color: #92400E !important; }
 
-            /* ── Tables ── */
+            /* ── TABLES ── */
             .twrap {
-                border: 0.5pt solid #ccc !important;
+                border: 0.5pt solid #D1D5DB !important;
                 border-radius: 0 !important;
                 margin-bottom: 8pt !important;
                 overflow: visible !important;
+                page-break-inside: auto !important;
             }
-            table  { width: 100% !important; font-size: 8.5pt !important; border-collapse: collapse !important; }
-            thead  { display: table-header-group !important; }
-            tfoot  { display: table-footer-group !important; }
-            thead tr, tfoot tr { background: #1a1a2e !important; }
+            table   { font-size: 8pt !important; border-collapse: collapse !important; }
+            thead   { display: table-header-group !important; }
+            tfoot   { display: table-footer-group !important; }
+            thead tr { background: #1F2937 !important; break-inside: avoid !important; }
             th {
-                padding: 4pt 5pt !important;
-                font-size: 7pt !important;
+                padding: 4pt 6pt !important;
+                font-size: 6.5pt !important;
+                background: #1F2937 !important;
+                color: #E5E7EB !important;
                 font-weight: bold !important;
-                background: #1a1a2e !important;
-                color: #fff !important;
                 white-space: nowrap !important;
-                text-transform: uppercase !important;
-                letter-spacing: 0.3pt !important;
             }
             td {
-                padding: 4pt 5pt !important;
-                border-bottom: 0.5pt solid #e0e0e0 !important;
-                vertical-align: middle !important;
+                padding: 3.5pt 6pt !important;
+                border-bottom: 0.5pt solid #E5E7EB !important;
+                font-size: 8pt !important;
                 color: #000 !important;
             }
-            tbody tr:last-child td { border-bottom: none !important; }
-            tbody tr:nth-child(even) td { background: #f9f9f9 !important; }
+            tbody tr:nth-child(even) td { background: #F9FAFB !important; }
+            tbody tr:hover td { background: transparent !important; }
             tfoot tr td {
-                padding: 4pt 5pt !important;
-                font-size: 8pt !important;
+                padding: 4pt 6pt !important;
+                font-size: 7.5pt !important;
                 font-weight: bold !important;
-                background: #1a1a2e !important;
-                color: #fff !important;
+                background: #1F2937 !important;
+                color: #F9FAFB !important;
                 border-bottom: none !important;
             }
-            tfoot tr td.tot-label { font-size: 7pt !important; color: #aaa !important; font-weight: normal !important; }
-            tfoot tr td.tot-hi    { font-size: 10pt !important; color: #6ee7b7 !important; }
-            tfoot tr td.tot-warn  { color: #fcd34d !important; }
-            tr { break-inside: avoid !important; page-break-inside: avoid !important; }
-            .tn { font-size: 8.5pt !important; font-weight: bold !important; }
-            .tm { font-size: 8pt !important; color: #555 !important; }
-            .inv-stock-val { font-size: 9pt !important; font-weight: bold !important; }
-
-            /* ── Two-column layout ── */
-            .twocol {
-                display: flex !important;
-                gap: 12pt !important;
-                margin: 0 !important;
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-                overflow: visible !important;
-            }
-            .twocol > div { overflow: visible !important; }
-            .col-head {
-                font-size: 7pt !important;
-                font-weight: bold !important;
-                text-transform: uppercase !important;
-                padding-bottom: 4pt !important;
-                margin-bottom: 5pt !important;
-                border-bottom: 1pt solid #ccc !important;
-            }
-
-            /* ── Package bars ── */
-            .pkg-row    { margin-bottom: 5pt !important; }
-            .pkg-lbl    { font-size: 8.5pt !important; width: 52pt !important; }
-            .pkg-bar-bg { height: 8pt !important; border-radius: 0 !important; }
-            .pkg-ct     { font-size: 8.5pt !important; width: 36pt !important; }
-
-            /* ── Peak hours ── */
-            .peak-banner {
-                font-size: 8pt !important;
-                padding: 4pt 8pt !important;
-                margin: 0 0 6pt !important;
-                border-radius: 0 !important;
-                background: #fff3f3 !important;
-                border: 0.5pt solid #f99 !important;
-            }
-            .peak-grid  { gap: 4pt !important; margin: 0 0 8pt !important; }
-            .peak-bwrap { height: 48pt !important; }
-            .peak-lbl   { font-size: 6.5pt !important; }
-            .peak-ct    { font-size: 6.5pt !important; font-weight: bold !important; }
-
-            /* ── Extras ── */
-            .ext-row  { padding: 3pt 0 !important; break-inside: avoid !important; }
-            .ext-name { font-size: 8.5pt !important; }
-            .ext-rev  { font-size: 8.5pt !important; width: 52pt !important; }
-            .ext-qty  { font-size: 8pt !important; }
-            .ext-bwrap { width: 52pt !important; }
-            .ext-rank { font-size: 8pt !important; }
-
-            /* ── Discount cards ── */
-            .disc-grid {
-                display: flex !important;
-                gap: 6pt !important;
-                flex-wrap: nowrap !important;
-                margin: 0 0 6pt !important;
-                break-inside: avoid !important;
-            }
-            .disc-card {
-                flex: 1 !important;
-                padding: 6pt 5pt !important;
-                border: 0.5pt solid #ccc !important;
-                border-radius: 0 !important;
-                background: #f9f9f9 !important;
-                break-inside: avoid !important;
-            }
-            .disc-emoji  { font-size: 14pt !important; margin-bottom: 2pt !important; }
-            .disc-type   { font-size: 7pt !important; color: #555 !important; margin-bottom: 2pt !important; }
-            .disc-count  { font-size: 18pt !important; font-weight: bold !important; }
-            .disc-amount { font-size: 7pt !important; color: #555 !important; margin-top: 2pt !important; }
-            .disc-pct    { font-size: 6.5pt !important; color: #777 !important; }
-            .disc-note {
-                font-size: 7.5pt !important;
-                padding: 5pt 7pt !important;
-                margin: 0 0 5pt !important;
-                background: #fffbeb !important;
-                border: 0.5pt solid #f0d080 !important;
-                border-radius: 0 !important;
-                line-height: 1.5 !important;
-                break-inside: avoid !important;
-            }
-
-            /* ── Stock cards ── */
-            .cat-head {
-                font-size: 7.5pt !important;
-                font-weight: bold !important;
-                text-transform: uppercase !important;
-                letter-spacing: 0.5pt !important;
-                color: #333 !important;
-                margin: 7pt 0 3pt !important;
-                break-after: avoid !important;
-            }
-            .stock-cards {
-                gap: 3pt !important;
-                margin: 0 0 8pt !important;
-                break-inside: auto !important;
-            }
-            .stock-card {
-                display: grid !important;
-                grid-template-columns: 1fr 72pt 18pt 72pt 58pt 64pt !important;
-                border: 0.5pt solid #ccc !important;
-                border-radius: 0 !important;
-                overflow: visible !important;
-                break-inside: avoid !important;
-            }
-            .sc-name           { font-size: 8.5pt !important; font-weight: bold !important; padding: 5pt 6pt !important; }
-            .sc-name span      { font-size: 7pt !important; color: #666 !important; }
-            .sc-open, .sc-close, .sc-change, .sc-status, .sc-arrow {
-                padding: 5pt 4pt !important;
-            }
-            .sc-open  { background: #f0fff4 !important; }
-            .sc-close { background: #eff6ff !important; }
-            .sc-open-lbl, .sc-close-lbl, .sc-change-lbl { font-size: 6pt !important; font-weight: bold !important; }
-            .sc-open-val, .sc-close-val   { font-size: 10pt !important; font-weight: bold !important; }
-            .sc-open-unit, .sc-close-unit { font-size: 6.5pt !important; }
-            .sc-change-val { font-size: 9pt !important; font-weight: bold !important; }
-            .sc-arrow      { font-size: 10pt !important; color: #999 !important; }
-
-            /* ── Badges ── */
-            .badge {
-                padding: 1pt 4pt !important;
+            tfoot .tot-label { color: rgba(255,255,255,0.4) !important; font-size: 6pt !important; }
+            tfoot .tot-hi    { color: #6EE7B7 !important; font-size: 9pt !important; font-weight: bold !important; }
+            tfoot .tot-amber { color: #FCD34D !important; }
+            tr { break-inside: avoid !important; }
+            .tn { font-size: 8pt !important; font-weight: bold !important; }
+            .tm { font-size: 7.5pt !important; color: #4B5563 !important; }
+            .tg { color: #166534 !important; font-weight: bold !important; }
+            .tr { color: #991B1B !important; font-weight: bold !important; }
+            .to { color: #92400E !important; font-weight: bold !important; }
+            .tb { font-weight: bold !important; color: #000 !important; }
+            .cat-row td {
+                background: #E5E7EB !important;
                 font-size: 6.5pt !important;
-                border-radius: 2pt !important;
-                font-weight: bold !important;
+                padding: 3pt 6pt !important;
+                color: #374151 !important;
             }
-            .b-ok   { background: #d1fae5 !important; color: #065f46 !important; }
-            .b-low  { background: #fef9c3 !important; color: #713f12 !important; }
-            .b-zero { background: #fee2e2 !important; color: #7f1d1d !important; }
-            .b-in   { background: #d1fae5 !important; color: #065f46 !important; }
-            .b-out  { background: #fee2e2 !important; color: #7f1d1d !important; }
-            .b-same { background: #f3f4f6 !important; color: #374151 !important; }
-            .b-cash { background: #d1fae5 !important; color: #065f46 !important; }
-            .b-qr   { background: #dbeafe !important; color: #1e3a5f !important; }
 
-            /* ── Colour overrides ── */
-            .tg { color: #065f46 !important; }
-            .tr { color: #7f1d1d !important; }
-            .to { color: #78350f !important; }
-            .tb { color: #000 !important; }
-            .tm { color: #555 !important; }
-            .green  { color: #065f46 !important; }
-            .red    { color: #7f1d1d !important; }
-            .orange { color: #78350f !important; }
-            .blue   { color: #1e3a5f !important; }
-            .purple { color: #4c1d95 !important; }
-
-            /* ── No data ── */
-            .nodata {
-                padding: 10pt !important;
-                font-size: 9pt !important;
-                border: 0.5pt dashed #ccc !important;
-                border-radius: 0 !important;
+            /* ── TWOCOL ── */
+            .twocol {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8pt !important;
                 break-inside: avoid !important;
             }
+            .col-title { font-size: 7pt !important; padding-bottom: 3pt !important; margin-bottom: 4pt !important; border-bottom: 0.5pt solid #D1D5DB !important; }
 
-            /* ── Inventory grand total ── */
-            .inv-grand-total {
-                margin: 0 0 8pt !important;
-                border-radius: 0 !important;
-                padding: 6pt 10pt !important;
-                break-inside: avoid !important;
-            }
-            .inv-grand-total div:last-child { font-size: 13pt !important; }
+            /* ── PACKAGE BARS ── */
+            .pkg-box { padding: 7pt 8pt !important; border: 0.5pt solid #D1D5DB !important; border-radius: 0 !important; background: #F9FAFB !important; }
+            .pkg-row { margin-bottom: 5pt !important; }
+            .pkg-lbl { font-size: 8pt !important; width: 46pt !important; }
+            .pkg-bar-bg { height: 8pt !important; border-radius: 2pt !important; }
+            .pkg-ct  { font-size: 8pt !important; width: 36pt !important; }
 
-            /* ── Document footer (rfooter) and signature block ── */
-            .spacer  { height: 4pt !important; }
-            .rfooter {
-                margin-top: 6pt !important;
-                padding: 5pt 0 !important;
-                font-size: 7.5pt !important;
-                border-top: 0.5pt solid #ccc !important;
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-            }
+            /* ── PEAK HOURS ── */
+            .peak-highlight { font-size: 8pt !important; padding: 4pt 8pt !important; border-radius: 0 !important; margin-bottom: 6pt !important; background: #FEF9C3 !important; border-color: #FCD34D !important; }
 
-            /* ── Grand total summary panel ── */
-            .grand-total-banner { break-inside: avoid !important; }
-            .sig-block { break-inside: avoid !important; }
+            /* ── EXTRAS ── */
+            .ext-box  { padding: 5pt 7pt !important; border: 0.5pt solid #D1D5DB !important; border-radius: 0 !important; background: #F9FAFB !important; }
+            .ext-row  { padding: 3pt 0 !important; }
+            .ext-name { font-size: 8pt !important; }
+            .ext-rev  { font-size: 8pt !important; width: 48pt !important; }
+            .ext-qty  { font-size: 7pt !important; }
+            .ext-bwrap{ width: 48pt !important; height: 5pt !important; }
 
-            /* Ensure wrap doesn't clip content */
-            .wrap { overflow: visible !important; }
+            /* ── DISCOUNT CARDS ── */
+            .disc-grid { display: flex !important; gap: 5pt !important; flex-wrap: nowrap !important; break-inside: avoid !important; }
+            .disc-card { flex: 1 !important; padding: 5pt 6pt !important; border: 0.5pt solid #D1D5DB !important; border-radius: 0 !important; background: #F9FAFB !important; break-inside: avoid !important; }
+            .disc-emoji  { font-size: 11pt !important; margin-bottom: 2pt !important; }
+            .disc-type   { font-size: 6pt !important; color: #4B5563 !important; }
+            .disc-count  { font-size: 14pt !important; font-weight: bold !important; }
+            .disc-amount { font-size: 7pt !important; color: #374151 !important; }
+            .disc-pct    { font-size: 6pt !important; }
 
-            /* ── Page footer: fixed bar on every page ── */
+            /* ── CALLOUT ── */
+            .callout { font-size: 7pt !important; padding: 4pt 7pt !important; margin-bottom: 6pt !important; background: #FFFBEB !important; border: 0.5pt solid #FCD34D !important; border-radius: 0 !important; }
+
+            /* ── P&L ── */
+            .pnl-verdict { padding: 8pt 10pt !important; margin-bottom: 8pt !important; break-inside: avoid !important; border-radius: 0 !important; }
+            .pnl-verdict-amount { font-size: 18pt !important; }
+            .pnl-verdict-label  { font-size: 7pt !important; }
+            .pnl-verdict-sub    { font-size: 7.5pt !important; }
+            .pnl-verdict-margin-ring { width: 36pt !important; height: 36pt !important; border-width: 2pt !important; }
+            .pnl-verdict-margin-ring span { font-size: 10pt !important; }
+
+            .pnl-banner { border-radius: 0 !important; margin-bottom: 6pt !important; break-inside: avoid !important; }
+            .pnl-col { padding: 8pt 10pt !important; }
+            .pnl-col-val { font-size: 14pt !important; }
+            .pnl-col-lbl { font-size: 6.5pt !important; }
+            .pnl-minus, .pnl-equals { font-size: 16pt !important; padding: 0 3pt !important; }
+
+            .pnl-breakdown { border-radius: 0 !important; border: 0.5pt solid #D1D5DB !important; }
+            .pnl-row { padding: 5pt 8pt !important; gap: 8pt !important; }
+            .pnl-row-title { font-size: 8pt !important; }
+            .pnl-row-desc  { font-size: 6.5pt !important; }
+            .pnl-row-val   { font-size: 9pt !important; min-width: 70pt !important; }
+
+            /* ── GRAND PANEL ── */
+            .grand-panel { border-radius: 0 !important; break-inside: avoid !important; }
+            .grand-panel-head { padding: 4pt 8pt !important; font-size: 6.5pt !important; background: #374151 !important; }
+            .grand-panel-body { grid-template-columns: repeat(4, 1fr) !important; }
+            .grand-cell { padding: 6pt 8pt !important; }
+            .grand-cell-lbl { font-size: 6pt !important; }
+            .grand-cell-val { font-size: 12pt !important; }
+            .grand-cell-sub { font-size: 6.5pt !important; }
+
+            /* ── SIGNATURES ── */
+            .sig-grid { gap: 16pt !important; break-inside: avoid !important; }
+            .sig-line  { margin-top: 22pt !important; border-top: 0.75pt solid #9CA3AF !important; }
+            .sig-name  { font-size: 8pt !important; }
+            .sig-role  { font-size: 6.5pt !important; }
+
+            /* ── FOOTER ── */
+            .rfooter { padding: 5pt 12pt !important; font-size: 7pt !important; border-top: 0.5pt solid #D1D5DB !important; background: #F9FAFB !important; break-inside: avoid !important; }
+
+            /* ── BADGES ── */
+            .badge { padding: 1pt 4pt !important; font-size: 6.5pt !important; font-weight: bold !important; border-radius: 2pt !important; }
+
+            /* ── PAGE FOOTER (repeats on every page) ── */
             .pgfooter {
-                display: block !important;
-                position: fixed !important;
-                bottom: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                height: 12mm !important;
-                border-top: 0.75pt solid #333 !important;
-                background: #fff !important;
-                padding: 0 15mm !important;
                 display: flex !important;
+                position: fixed !important;
+                bottom: 0 !important; left: 0 !important; right: 0 !important;
+                height: 12mm !important;
+                border-top: 0.5pt solid #9CA3AF !important;
+                background: #fff !important;
+                padding: 0 14mm !important;
                 align-items: center !important;
                 justify-content: space-between !important;
-                font-size: 8pt !important;
-                color: #555 !important;
+                font-size: 7pt !important;
+                color: #4B5563 !important;
                 font-family: Arial, Helvetica, sans-serif !important;
             }
-            .pgfooter-mid {
-                font-weight: bold !important;
-                color: #000 !important;
-                font-size: 9pt !important;
-            }
+
+            /* ── NODATA ── */
+            .nodata { border: 0.5pt dashed #D1D5DB !important; border-radius: 0 !important; padding: 14pt !important; background: #F9FAFB !important; }
         }
-
-        .pgfooter { display: none; }
-
-
     </style>
 </head>
 <body>
 
 
-<div class="toolbar">
-    <span class="toolbar-title">📄 &nbsp;SamgyHann 199 · Sales Report · <?php echo e($periodLabel); ?></span>
+<div class="toolbar screen-only">
+    <span class="toolbar-title">📄 &nbsp;<strong>SamgyHann 199</strong> &nbsp;·&nbsp; Sales Report &nbsp;·&nbsp; <?php echo e($periodLabel); ?></span>
     <button class="btn-print" onclick="window.print()">🖨️ &nbsp;Print / Save as PDF</button>
 </div>
 
@@ -717,47 +614,55 @@
     <div class="rh">
         <div class="rh-top">
             <div class="rh-brand">
-                <img src="<?php echo e(asset('samgyhann-logo.png')); ?>" alt="logo" class="rh-logo">
+                <img src="<?php echo e(asset('samgyhann-logo.png')); ?>" alt="SamgyHann Logo" class="rh-logo">
                 <div>
                     <div class="rh-name">SamgyHann 199</div>
                     <div class="rh-sub">Unlimited Samgyeopsal &nbsp;·&nbsp; Olongapo City, Zambales</div>
                 </div>
             </div>
             <div class="rh-meta">
-                <div><strong>Generated:</strong> <?php echo e($generatedAt); ?></div>
-                <div><strong>By:</strong> <?php echo e($generatedBy); ?></div>
-                <div>SamgyHann POS System</div>
+                <div><strong>Report Generated:</strong> <?php echo e($generatedAt); ?></div>
+                <div><strong>Prepared By:</strong> <?php echo e($generatedBy); ?></div>
+                <div><strong>System:</strong> SamgyHann POS</div>
             </div>
         </div>
-        <div class="rh-period">📋 &nbsp;Sales Report &nbsp;·&nbsp; <?php echo e($periodLabel); ?></div>
-        <div style="display:flex;gap:32px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);font-size:13px;">
-            <div><span style="opacity:0.65;font-size:11px;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:3px;">📅 Beginning Date</span><strong><?php echo e($reportStartDate); ?></strong></div>
-            <div><span style="opacity:0.65;font-size:11px;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:3px;">📅 Ending Date</span><strong><?php echo e($reportEndDate); ?></strong></div>
-            <div style="margin-left:auto;text-align:right;"><span style="opacity:0.65;font-size:11px;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:3px;">🖨️ Printed On</span><strong><?php echo e($printedOn); ?></strong></div>
+        <div class="rh-period-band">
+            <div class="rh-period-item">
+                <span class="rh-period-lbl">📋 Report Type</span>
+                <span class="rh-period-val">Sales Report</span>
+            </div>
+            <div class="rh-period-item">
+                <span class="rh-period-lbl">📅 Period Covered</span>
+                <span class="rh-period-val"><?php echo e($periodLabel); ?></span>
+            </div>
+            <div class="rh-period-item">
+                <span class="rh-period-lbl">🗓️ From</span>
+                <span class="rh-period-val"><?php echo e($reportStartDate); ?></span>
+            </div>
+            <div class="rh-period-item">
+                <span class="rh-period-lbl">🗓️ To</span>
+                <span class="rh-period-val"><?php echo e($reportEndDate); ?></span>
+            </div>
+            <div class="rh-period-item" style="margin-left:auto;">
+                <span class="rh-period-lbl">🖨️ Printed On</span>
+                <span class="rh-period-val" style="font-size:12px;"><?php echo e($printedOn); ?></span>
+            </div>
         </div>
     </div>
 
     
-    <div class="toc">
-        <a href="#s1">① Summary</a>
-        <a href="#s2">② Breakdown</a>
-        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($revenueByDay->count() > 1): ?><a href="#s3">③ Daily Revenue</a><?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-        <a href="#s4">④ Peak Hours</a>
-        <a href="#s5">⑤ Extras & Add-ons</a>
-        <a href="#s6">⑥ Discounts</a>
-        <a href="#s7">⑦ Order Details</a>
-        <a href="#s8">⑧ Opening vs Closing Stock</a>
-        <a href="#s9">⑨ Inventory</a>
-    </div>
-
-    
-    <div class="stitle" id="s1"><span class="stitle-bar"></span> ① Summary</div>
+    <div class="stitle"><span class="stitle-num">1</span> Summary Overview</div>
 
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if((int)$summary->total_orders === 0): ?>
-        <div class="nodata">📭 &nbsp;No completed orders found for this period.</div>
+        <div class="sbody">
+            <div class="nodata">
+                <div class="nodata-icon">📭</div>
+                No completed orders found for this period.
+            </div>
+        </div>
     <?php else: ?>
 
-    <div class="kpis kpis-7">
+    <div class="sbody">
         <?php
             if (!function_exists('kpiSizeClass')) {
                 function kpiSizeClass(string $val): string {
@@ -772,543 +677,733 @@
             $rpgStr  = '₱' . number_format($revenuePerGuest, 2);
             $discStr = '₱' . number_format($summary->total_discounts, 2);
         ?>
-        <div class="kpi"><div class="kpi-lbl">Total Orders</div><div class="kpi-val blue"><?php echo e(number_format($summary->total_orders)); ?></div></div>
-        <div class="kpi"><div class="kpi-lbl">Total Revenue</div><div class="kpi-val green <?php echo e(kpiSizeClass($revStr)); ?>"><?php echo e($revStr); ?></div></div>
-        <div class="kpi"><div class="kpi-lbl">Total Guests</div><div class="kpi-val orange"><?php echo e(number_format($summary->total_guests)); ?></div></div>
-        <div class="kpi"><div class="kpi-lbl">Avg Order Value</div><div class="kpi-val <?php echo e(kpiSizeClass($avgStr)); ?>"><?php echo e($avgStr); ?></div><div class="kpi-hint">per order</div></div>
-        <div class="kpi"><div class="kpi-lbl">Revenue / Guest</div><div class="kpi-val purple <?php echo e(kpiSizeClass($rpgStr)); ?>"><?php echo e($rpgStr); ?></div><div class="kpi-hint">per head</div></div>
-        <div class="kpi"><div class="kpi-lbl">Avg Party Size</div><div class="kpi-val"><?php echo e(number_format($summary->avg_party_size, 1)); ?></div><div class="kpi-hint">guests / order</div></div>
-        <div class="kpi"><div class="kpi-lbl">Total Discounts</div><div class="kpi-val red <?php echo e(kpiSizeClass($discStr)); ?>"><?php echo e($discStr); ?></div></div>
-    </div>
 
-    
-    <div class="stitle" id="s2"><span class="stitle-bar"></span> ② Breakdown</div>
-
-    <div class="twocol">
-        <div>
-            <div class="col-head">💳 Payment Methods</div>
-            <div class="twrap" style="margin:0;">
-                <table>
-                    <thead><tr>
-                        <th>Method</th><th class="c">Orders</th><th class="r">Revenue</th><th class="r">Share</th>
-                    </tr></thead>
-                    <tbody>
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $paymentBreakdown; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <?php $pct = $summary->total_revenue > 0 ? round(($p->total / $summary->total_revenue) * 100, 1) : 0; ?>
-                        <tr>
-                            <td><span class="badge <?php echo e($p->payment === 'Cash' ? 'b-cash' : 'b-qr'); ?>"><?php echo e($p->payment === 'Cash' ? '💵' : '📱'); ?> <?php echo e($p->payment); ?></span></td>
-                            <td class="c tb"><?php echo e($p->count); ?></td>
-                            <td class="r tb">₱<?php echo e(number_format($p->total, 2)); ?></td>
-                            <td class="r tm"><?php echo e($pct); ?>%</td>
-                        </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                        <tr><td colspan="4" class="tm" style="text-align:center;padding:24px;">No data</td></tr>
-                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                    </tbody>
-                </table>
+        
+        <div class="kpis kpis-4">
+            <div class="kpi" style="border-color:#bfdbfe;">
+                <div class="kpi-lbl">Total Orders</div>
+                <div class="kpi-val c-blue"><?php echo e(number_format($summary->total_orders)); ?></div>
+                <div class="kpi-hint">tables served</div>
+            </div>
+            <div class="kpi" style="border-color:#bbf7d0;">
+                <div class="kpi-lbl">Total Revenue</div>
+                <div class="kpi-val c-green <?php echo e(kpiSizeClass($revStr)); ?>"><?php echo e($revStr); ?></div>
+                <div class="kpi-hint">money collected</div>
+            </div>
+            <div class="kpi" style="border-color:#fed7aa;">
+                <div class="kpi-lbl">Total Guests</div>
+                <div class="kpi-val c-orange"><?php echo e(number_format($summary->total_guests)); ?></div>
+                <div class="kpi-hint">people served</div>
+            </div>
+            <div class="kpi" style="border-color:#fecaca;">
+                <div class="kpi-lbl">Total Discounts Given</div>
+                <div class="kpi-val c-red <?php echo e(kpiSizeClass($discStr)); ?>"><?php echo e($discStr); ?></div>
+                <div class="kpi-hint">deducted from sales</div>
             </div>
         </div>
-        <div>
-            <div class="col-head">📦 Package Popularity <span style="font-weight:500;color:#9ca3af;">by guests</span></div>
-            <?php $maxPkg = max(array_values($packageCounts) ?: [1]); ?>
-            <div style="background:#f9fafb;border:2px solid #e5e7eb;border-radius:10px;padding:20px 18px;">
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $packageCounts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $count): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="pkg-row">
-                    <div class="pkg-lbl"><?php echo e($name); ?></div>
-                    <div class="pkg-bar-bg">
-                        <div class="pkg-bar pb-<?php echo e(strtolower($name)); ?>" style="width:<?php echo e($maxPkg > 0 ? round(($count/$maxPkg)*100) : 0); ?>%;"></div>
-                    </div>
-                    <div class="pkg-ct"><?php echo e(number_format($count)); ?> pax</div>
+        <div class="kpis kpis-3">
+            <div class="kpi">
+                <div class="kpi-lbl">Average Order Value</div>
+                <div class="kpi-val c-amber <?php echo e(kpiSizeClass($avgStr)); ?>"><?php echo e($avgStr); ?></div>
+                <div class="kpi-hint">per table / order</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-lbl">Revenue Per Guest</div>
+                <div class="kpi-val <?php echo e(kpiSizeClass($rpgStr)); ?>"><?php echo e($rpgStr); ?></div>
+                <div class="kpi-hint">per person (per head)</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-lbl">Average Party Size</div>
+                <div class="kpi-val"><?php echo e(number_format($summary->avg_party_size, 1)); ?></div>
+                <div class="kpi-hint">guests per table</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    
+    <div class="stitle"><span class="stitle-num" style="background:#166534;">₱</span> Revenue vs Cost (Profit &amp; Loss)</div>
+    <div class="sbody">
+        
+        <div class="pnl-verdict <?php echo e($grossProfit >= 0 ? 'pnl-verdict-gain' : 'pnl-verdict-loss'); ?>">
+            <div class="pnl-verdict-icon"><?php echo e($grossProfit >= 0 ? '📈' : '📉'); ?></div>
+            <div class="pnl-verdict-body">
+                <div class="pnl-verdict-label"><?php echo e($grossProfit >= 0 ? '✅ NET GAIN — You are profitable this period' : '❌ NET LOSS — Costs exceeded revenue this period'); ?></div>
+                <div class="pnl-verdict-amount"><?php echo e($grossProfit >= 0 ? '+' : '−'); ?>₱<?php echo e(number_format(abs($grossProfit), 2)); ?></div>
+                <div class="pnl-verdict-sub">
+                    Gross margin: <strong><?php echo e($grossMarginPct); ?>%</strong>
+                    &nbsp;·&nbsp;
+                    Revenue: <strong>₱<?php echo e(number_format($summary->total_revenue, 2)); ?></strong>
+                    &nbsp;·&nbsp;
+                    Total cost: <strong>₱<?php echo e(number_format($totalCogs, 2)); ?></strong>
                 </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            </div>
+            <div class="pnl-verdict-margin">
+                <div class="pnl-verdict-margin-ring <?php echo e($grossMarginPct >= 50 ? 'ring-good' : ($grossMarginPct >= 25 ? 'ring-ok' : 'ring-bad')); ?>">
+                    <span><?php echo e($grossMarginPct); ?>%</span>
+                    <small>margin</small>
+                </div>
             </div>
         </div>
-    </div>
 
-    
-    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($revenueByDay->count() > 1): ?>
-    <div class="stitle" id="s3"><span class="stitle-bar"></span> ③ Daily Revenue</div>
-    <div class="twrap">
-        <table>
-            <thead><tr>
-                <th>Date</th><th class="c">Orders</th><th class="c">Guests</th>
-                <th class="r">Revenue</th><th class="r">Avg / Order</th><th class="r">Rev / Guest</th>
-            </tr></thead>
-            <tbody>
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $revenueByDay; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <tr>
-                    <td class="tn"><?php echo e(\Carbon\Carbon::parse($day->day)->format('D, M j, Y')); ?></td>
-                    <td class="c"><?php echo e($day->orders); ?></td>
-                    <td class="c"><?php echo e($day->guests ?? 0); ?></td>
-                    <td class="r tb">₱<?php echo e(number_format($day->revenue, 2)); ?></td>
-                    <td class="r tm">₱<?php echo e($day->orders > 0 ? number_format($day->revenue / $day->orders, 2) : '—'); ?></td>
-                    <td class="r tm">₱<?php echo e(($day->guests ?? 0) > 0 ? number_format($day->revenue / $day->guests, 2) : '—'); ?></td>
-                </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-            </tbody>
-            <?php
-                $dayTotalOrders  = $revenueByDay->sum('orders');
-                $dayTotalGuests  = $revenueByDay->sum('guests');
-                $dayTotalRevenue = $revenueByDay->sum('revenue');
-            ?>
-            <tfoot><tr>
-                <td class="tot-label"><?php echo e($revenueByDay->count()); ?>-day total</td>
-                <td class="c"><?php echo e(number_format($dayTotalOrders)); ?></td>
-                <td class="c"><?php echo e(number_format($dayTotalGuests)); ?></td>
-                <td class="r tot-hi">₱<?php echo e(number_format($dayTotalRevenue, 2)); ?></td>
-                <td class="r tot-warn">₱<?php echo e($dayTotalOrders > 0 ? number_format($dayTotalRevenue / $dayTotalOrders, 2) : '—'); ?></td>
-                <td class="r tot-warn">₱<?php echo e($dayTotalGuests > 0 ? number_format($dayTotalRevenue / $dayTotalGuests, 2) : '—'); ?></td>
-            </tr></tfoot>
-        </table>
-    </div>
-    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+        <div class="callout" style="margin-bottom:14px;">
+            📈 <strong>What is Profit &amp; Loss?</strong>
+            It compares the money you <em>earned</em> (Revenue) against the money you <em>spent on ingredients and stock</em> (Cost of Goods Sold / COGS).
+            What's left after subtracting the cost is your <strong>Gross Profit</strong> — the actual money your business made.
+            A <strong>gain</strong> means revenue covered all costs with money to spare. A <strong>loss</strong> means costs were higher than earnings.
+            <em>Note: This only counts ingredient/stock costs tracked in the inventory — it does not include rent, utilities, or staff wages.</em>
+        </div>
 
-    
-    <div class="stitle" id="s4"><span class="stitle-bar"></span> ④ Peak Hours Analysis</div>
+        
+        <div class="pnl-banner">
+            <div class="pnl-col pnl-col-rev">
+                <div class="pnl-col-icon">📥</div>
+                <div class="pnl-col-lbl">Total Revenue Earned</div>
+                <div class="pnl-col-val pnl-green">₱<?php echo e(number_format($summary->total_revenue, 2)); ?></div>
+                <div class="pnl-col-hint">Money collected from customers</div>
+            </div>
+            <div class="pnl-minus">−</div>
+            <div class="pnl-col pnl-col-cost">
+                <div class="pnl-col-icon">📦</div>
+                <div class="pnl-col-lbl">Cost of Goods Sold (COGS)</div>
+                <div class="pnl-col-val pnl-red">₱<?php echo e(number_format($totalCogs, 2)); ?></div>
+                <div class="pnl-col-hint">Estimated ingredient/stock cost used</div>
+            </div>
+            <div class="pnl-equals">=</div>
+            <div class="pnl-col pnl-col-profit <?php echo e($grossProfit >= 0 ? 'pnl-col-profit-pos' : 'pnl-col-profit-neg'); ?>">
+                <div class="pnl-col-icon"><?php echo e($grossProfit >= 0 ? '🏆' : '⚠️'); ?></div>
+                <div class="pnl-col-lbl">Gross Profit</div>
+                <div class="pnl-col-val <?php echo e($grossProfit >= 0 ? 'pnl-green' : 'pnl-red'); ?>">
+                    <?php echo e($grossProfit >= 0 ? '' : '−'); ?>₱<?php echo e(number_format(abs($grossProfit), 2)); ?>
 
-    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($peakHours->isEmpty()): ?>
-        <div class="nodata">No hourly data available for this period.</div>
-    <?php else: ?>
-        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($busiestHour): ?>
-        <div class="peak-banner">
-            🔥 &nbsp;Busiest hour: &nbsp;<strong><?php echo e($busiestHour['label']); ?></strong>
-            &nbsp;·&nbsp; <?php echo e($busiestHour['orders']); ?> orders
-            &nbsp;·&nbsp; ₱<?php echo e(number_format($busiestHour['revenue'], 2)); ?> revenue
+                </div>
+                <div class="pnl-col-hint">
+                    <span class="pnl-margin-badge <?php echo e($grossMarginPct >= 50 ? 'pnl-badge-good' : ($grossMarginPct >= 25 ? 'pnl-badge-ok' : 'pnl-badge-warn')); ?>">
+                        <?php echo e($grossMarginPct); ?>% margin
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="pnl-breakdown">
+            <div class="pnl-row">
+                <div class="pnl-row-icon">🧾</div>
+                <div class="pnl-row-label">
+                    <div class="pnl-row-title">Revenue from Packages & Add-ons</div>
+                    <div class="pnl-row-desc">Money collected from dine-in customers (after discounts applied)</div>
+                </div>
+                <div class="pnl-row-val pnl-green">₱<?php echo e(number_format($summary->total_revenue, 2)); ?></div>
+            </div>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalExtrasRevenue > 0): ?>
+            <div class="pnl-row">
+                <div class="pnl-row-icon">🥤</div>
+                <div class="pnl-row-label">
+                    <div class="pnl-row-title">Revenue from Extras (Drinks, etc.)</div>
+                    <div class="pnl-row-desc">Already included in revenue above — shown separately for clarity</div>
+                </div>
+                <div class="pnl-row-val" style="color:#1D4ED8;">₱<?php echo e(number_format($totalExtrasRevenue, 2)); ?></div>
+            </div>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalExtrasCost > 0): ?>
+            <div class="pnl-row">
+                <div class="pnl-row-icon">🏷️</div>
+                <div class="pnl-row-label">
+                    <div class="pnl-row-title">Cost of Extras Sold</div>
+                    <div class="pnl-row-desc">Included in COGS below — extras gross profit: ₱<?php echo e(number_format($totalExtrasProfit, 2)); ?> (<?php echo e($extrasMarginPct); ?>% margin)</div>
+                </div>
+                <div class="pnl-row-val pnl-orange">− ₱<?php echo e(number_format($totalExtrasCost, 2)); ?></div>
+            </div>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <div class="pnl-row">
+                <div class="pnl-row-icon">🥩</div>
+                <div class="pnl-row-label">
+                    <div class="pnl-row-title">Cost of Stock Used for Sales</div>
+                    <div class="pnl-row-desc">Estimated ingredient cost auto-deducted when orders were processed</div>
+                </div>
+                <div class="pnl-row-val pnl-red">− ₱<?php echo e(number_format($salesCogs, 2)); ?></div>
+            </div>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($manualCogs > 0): ?>
+            <div class="pnl-row">
+                <div class="pnl-row-icon">📋</div>
+                <div class="pnl-row-label">
+                    <div class="pnl-row-title">Manual Stock Removals</div>
+                    <div class="pnl-row-desc">Stock manually removed (waste, spoilage, corrections, etc.)</div>
+                </div>
+                <div class="pnl-row-val pnl-orange">− ₱<?php echo e(number_format($manualCogs, 2)); ?></div>
+            </div>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <div class="pnl-row">
+                <div class="pnl-row-icon">📉</div>
+                <div class="pnl-row-label">
+                    <div class="pnl-row-title">Total Discounts Given</div>
+                    <div class="pnl-row-desc">SC, PWD, and other discounts deducted from full price (already reflected in revenue above)</div>
+                </div>
+                <div class="pnl-row-val pnl-orange">− ₱<?php echo e(number_format($summary->total_discounts, 2)); ?></div>
+            </div>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($restockCost > 0): ?>
+            <div class="pnl-row pnl-row-restock">
+                <div class="pnl-row-icon">🚚</div>
+                <div class="pnl-row-label">
+                    <div class="pnl-row-title">Stock Restocking Spend <span style="font-size:10px;font-weight:500;color:#6B7280;">(informational)</span></div>
+                    <div class="pnl-row-desc">Estimated cost of stock deliveries received this period — not deducted from profit above</div>
+                </div>
+                <div class="pnl-row-val pnl-blue">₱<?php echo e(number_format($restockCost, 2)); ?></div>
+            </div>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <div class="pnl-row pnl-row-total">
+                <div class="pnl-row-icon"><?php echo e($grossProfit >= 0 ? '✅' : '❌'); ?></div>
+                <div class="pnl-row-label">
+                    <div class="pnl-row-title">Estimated Gross Profit</div>
+                    <div class="pnl-row-desc">Revenue minus cost of all goods used — <strong>your margin is <?php echo e($grossMarginPct); ?>%</strong></div>
+                </div>
+                <div class="pnl-row-val <?php echo e($grossProfit >= 0 ? 'pnl-green' : 'pnl-red'); ?>" style="font-size:18px;font-weight:800;">
+                    <?php echo e($grossProfit >= 0 ? '' : '−'); ?>₱<?php echo e(number_format(abs($grossProfit), 2)); ?>
+
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="kpis kpis-3" style="margin-top:16px;">
+            <div class="kpi" style="border-color:#bbf7d0;">
+                <div class="kpi-lbl">Revenue per Guest</div>
+                <div class="kpi-val c-green">₱<?php echo e(number_format($revenuePerGuest, 2)); ?></div>
+                <div class="kpi-hint">average earned per person</div>
+            </div>
+            <div class="kpi" style="border-color:#fecaca;">
+                <div class="kpi-lbl">Cost per Guest</div>
+                <div class="kpi-val c-red">₱<?php echo e(number_format($cogsPerGuest, 2)); ?></div>
+                <div class="kpi-hint">average ingredient cost per person</div>
+            </div>
+            <div class="kpi" style="border-color:<?php echo e(($revenuePerGuest - $cogsPerGuest) >= 0 ? '#bbf7d0' : '#fecaca'); ?>;">
+                <div class="kpi-lbl">Profit per Guest</div>
+                <div class="kpi-val <?php echo e(($revenuePerGuest - $cogsPerGuest) >= 0 ? 'c-green' : 'c-red'); ?>">
+                    ₱<?php echo e(number_format($revenuePerGuest - $cogsPerGuest, 2)); ?>
+
+                </div>
+                <div class="kpi-hint">margin earned per person</div>
+            </div>
+        </div>
+
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalCogs == 0): ?>
+        <div class="callout" style="margin-top:12px;">
+            ⚠️ <strong>Note:</strong> Cost data is ₱0.00 — this usually means product cost prices haven't been set in the Inventory tab,
+            or no stock movements were recorded during this period. Set a <strong>Cost Price</strong> per product in Inventory to see accurate profit figures.
         </div>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+    </div>
 
-        <div class="peak-grid">
-            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $peakHours; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hour): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <?php
-                $pct = $maxHourRevenue > 0 ? round(($hour['revenue']/$maxHourRevenue)*100) : 0;
-                $cls = $pct >= 85 ? 'pk-top' : ($pct >= 55 ? 'pk-high' : ($pct >= 25 ? 'pk-mid' : 'pk-low'));
-            ?>
-            <div class="peak-col">
-                <div class="peak-ct"><?php echo e($hour['orders']); ?></div>
-                <div class="peak-bwrap"><div class="peak-b <?php echo e($cls); ?>" style="height:<?php echo e(max(5,$pct)); ?>%;"></div></div>
-                <div class="peak-lbl"><?php echo e($hour['label']); ?></div>
+    <div class="section-divider"></div>
+
+    
+    <div class="stitle"><span class="stitle-num">2</span> Sales Breakdown</div>
+    <div class="sbody">
+        <div class="twocol">
+            <div>
+                <div class="col-title">💳 Payment Methods Used</div>
+                <div class="twrap">
+                    <table>
+                        <thead><tr>
+                            <th>Payment Type</th><th class="c">No. of Orders</th><th class="r">Total Collected</th><th class="r">% of Sales</th>
+                        </tr></thead>
+                        <tbody>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $paymentBreakdown; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <?php $pct = $summary->total_revenue > 0 ? round(($p->total / $summary->total_revenue) * 100, 1) : 0; ?>
+                            <tr>
+                                <td><span class="badge <?php echo e($p->payment === 'Cash' ? 'b-cash' : 'b-qr'); ?>"><?php echo e($p->payment === 'Cash' ? '💵' : '📱'); ?> <?php echo e($p->payment); ?></span></td>
+                                <td class="c tb"><?php echo e($p->count); ?></td>
+                                <td class="r tb">₱<?php echo e(number_format($p->total, 2)); ?></td>
+                                <td class="r tm"><?php echo e($pct); ?>%</td>
+                            </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <tr><td colspan="4" class="tm" style="text-align:center;padding:20px;">No payment data</td></tr>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <div>
+                <div class="col-title">📦 Package Popularity <span style="font-size:11px;color:#6B7280;font-weight:500;text-transform:none;">(by number of guests)</span></div>
+                <?php $maxPkg = max(array_values($packageCounts) ?: [1]); ?>
+                <div class="pkg-box">
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $packageCounts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $count): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="pkg-row">
+                        <div class="pkg-lbl"><?php echo e($name); ?></div>
+                        <div class="pkg-bar-bg">
+                            <div class="pkg-bar pb-<?php echo e(strtolower($name)); ?>" style="width:<?php echo e($maxPkg > 0 ? round(($count/$maxPkg)*100) : 0); ?>%;"></div>
+                        </div>
+                        <div class="pkg-ct"><?php echo e(number_format($count)); ?> pax</div>
+                    </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                </div>
+            </div>
         </div>
+    </div>
 
+    <div class="section-divider"></div>
+
+    
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($revenueByDay->count() > 0): ?>
+    <div class="stitle">
+        <span class="stitle-num">3</span> Daily Revenue
+        <span class="stitle-sub"><?php echo e($revenueByDay->count()); ?> days</span>
+    </div>
+    <div class="sbody">
         <div class="twrap">
             <table>
                 <thead><tr>
-                    <th>Hour</th><th class="c">Orders</th><th class="c">Guests</th>
-                    <th class="r">Revenue</th><th class="r">Avg / Order</th>
+                    <th>Date</th><th class="c">Orders</th><th class="c">Guests</th>
+                    <th class="r">Total Revenue</th><th class="r">Revenue / Order</th><th class="r">Revenue / Guest</th>
                 </tr></thead>
                 <tbody>
-                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $peakHours->sortByDesc('revenue'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hour): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $revenueByDay; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $day): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <tr>
-                        <td class="tn"><?php echo e($hour['label']); ?></td>
-                        <td class="c"><?php echo e($hour['orders']); ?></td>
-                        <td class="c"><?php echo e($hour['guests']); ?></td>
-                        <td class="r tb">₱<?php echo e(number_format($hour['revenue'], 2)); ?></td>
-                        <td class="r tm">₱<?php echo e($hour['orders'] > 0 ? number_format($hour['revenue']/$hour['orders'],2) : '—'); ?></td>
+                        <td class="tn"><?php echo e(\Carbon\Carbon::parse($day->day)->format('D, M j, Y')); ?></td>
+                        <td class="c"><?php echo e($day->orders); ?></td>
+                        <td class="c"><?php echo e($day->guests ?? 0); ?></td>
+                        <td class="r tb">₱<?php echo e(number_format($day->revenue, 2)); ?></td>
+                        <td class="r tm">₱<?php echo e($day->orders > 0 ? number_format($day->revenue / $day->orders, 2) : '—'); ?></td>
+                        <td class="r tm">₱<?php echo e(($day->guests ?? 0) > 0 ? number_format($day->revenue / $day->guests, 2) : '—'); ?></td>
                     </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </tbody>
+                <?php
+                    $dayTotalOrders  = $revenueByDay->sum('orders');
+                    $dayTotalGuests  = $revenueByDay->sum('guests');
+                    $dayTotalRevenue = $revenueByDay->sum('revenue');
+                ?>
+                <tfoot><tr>
+                    <td class="tot-label"><?php echo e($revenueByDay->count()); ?>-Day Total</td>
+                    <td class="c"><?php echo e(number_format($dayTotalOrders)); ?></td>
+                    <td class="c"><?php echo e(number_format($dayTotalGuests)); ?></td>
+                    <td class="r tot-hi">₱<?php echo e(number_format($dayTotalRevenue, 2)); ?></td>
+                    <td class="r tot-amber">₱<?php echo e($dayTotalOrders > 0 ? number_format($dayTotalRevenue / $dayTotalOrders, 2) : '—'); ?></td>
+                    <td class="r tot-amber">₱<?php echo e($dayTotalGuests > 0 ? number_format($dayTotalRevenue / $dayTotalGuests, 2) : '—'); ?></td>
+                </tr></tfoot>
             </table>
         </div>
+    </div>
+    <div class="section-divider"></div>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
     
-    <div class="stitle" id="s5"><span class="stitle-bar"></span> ⑤ Extras & Add-ons Revenue</div>
+    <div class="stitle"><span class="stitle-num">4</span> Busiest Hours of the Day</div>
+    <div class="sbody">
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($peakHours->isEmpty()): ?>
+            <div class="nodata">No hourly data available for this period.</div>
+        <?php else: ?>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($busiestHour): ?>
+            <div class="peak-highlight">
+                🔥 &nbsp;<strong>Busiest Hour:</strong> &nbsp;<?php echo e($busiestHour['label']); ?>
 
-    <div class="twocol">
-        <div>
-            <div class="col-head">🛒 Extra Items
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalExtrasRevenue > 0): ?><span class="tg">₱<?php echo e(number_format($totalExtrasRevenue, 2)); ?></span><?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                &nbsp;·&nbsp; <?php echo e($busiestHour['orders']); ?> orders
+                &nbsp;·&nbsp; ₱<?php echo e(number_format($busiestHour['revenue'], 2)); ?> earned
             </div>
-            <?php $mxE = collect($extrasMap)->max('revenue') ?: 1; $rk = 0; ?>
-            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(empty($extrasMap)): ?>
-                <div class="ext-empty">No extra items sold.</div>
-            <?php else: ?>
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $extrasMap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $d): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <?php $rk++; $bw = round(($d['revenue']/$mxE)*100); ?>
-                <div class="ext-row">
-                    <div class="ext-rank">#<?php echo e($rk); ?></div>
-                    <div class="ext-name"><?php echo e($name); ?></div>
-                    <div class="ext-bwrap"><div class="ext-bar eb-red" style="width:<?php echo e($bw); ?>%;"></div></div>
-                    <div class="ext-qty"><?php echo e($d['qty']); ?>×</div>
-                    <div class="ext-rev">₱<?php echo e(number_format($d['revenue'], 2)); ?></div>
-                </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-        </div>
-        <div>
-            <div class="col-head">➕ Add-ons
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalAddonsRevenue > 0): ?><span class="tg">₱<?php echo e(number_format($totalAddonsRevenue, 2)); ?></span><?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <div class="twrap">
+                <table>
+                    <thead><tr>
+                        <th>Hour of Day</th><th class="c">No. of Orders</th><th class="c">Guests</th>
+                        <th class="r">Revenue Earned</th><th class="r">Avg per Order</th>
+                    </tr></thead>
+                    <tbody>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $peakHours->sortByDesc('revenue'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hour): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <td class="tn"><?php echo e($hour['label']); ?></td>
+                            <td class="c"><?php echo e($hour['orders']); ?></td>
+                            <td class="c"><?php echo e($hour['guests']); ?></td>
+                            <td class="r tb">₱<?php echo e(number_format($hour['revenue'], 2)); ?></td>
+                            <td class="r tm">₱<?php echo e($hour['orders'] > 0 ? number_format($hour['revenue']/$hour['orders'],2) : '—'); ?></td>
+                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    </tbody>
+                </table>
             </div>
-            <?php $mxA = collect($addonsMap)->max('revenue') ?: 1; $rk = 0; ?>
-            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(empty($addonsMap)): ?>
-                <div class="ext-empty">No add-ons sold.</div>
-            <?php else: ?>
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $addonsMap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $d): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <?php $rk++; $bw = round(($d['revenue']/$mxA)*100); ?>
-                <div class="ext-row">
-                    <div class="ext-rank">#<?php echo e($rk); ?></div>
-                    <div class="ext-name"><?php echo e($name); ?></div>
-                    <div class="ext-bwrap"><div class="ext-bar eb-blue" style="width:<?php echo e($bw); ?>%;"></div></div>
-                    <div class="ext-qty"><?php echo e($d['qty']); ?>×</div>
-                    <div class="ext-rev">₱<?php echo e(number_format($d['revenue'], 2)); ?></div>
-                </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-        </div>
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     </div>
+
+    <div class="section-divider"></div>
 
     
-    <div class="stitle" id="s6"><span class="stitle-bar"></span> ⑥ Discount Summary</div>
+    <div class="stitle"><span class="stitle-num">5</span> Extras & Add-ons Sold</div>
+    <div class="sbody">
 
-    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalDiscountedGuests === 0): ?>
-        <div class="nodata">No discounts applied this period.</div>
-    <?php else: ?>
-    <div class="disc-grid">
-        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $discountTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <?php $pg = $summary->total_guests > 0 ? round(($dt['count']/$summary->total_guests)*100,1) : 0; ?>
-        <div class="disc-card">
-            <div class="disc-emoji"><?php echo e($dt['emoji']); ?></div>
-            <div class="disc-type"><?php echo e($dt['label']); ?></div>
-            <div class="disc-count" style="color:<?php echo e($dt['color']); ?>;"><?php echo e(number_format($dt['count'])); ?></div>
-            <div class="disc-amount">₱<?php echo e(number_format($dt['amount'], 2)); ?> saved</div>
-            <div class="disc-pct"><?php echo e($pg); ?>% of all guests</div>
+        
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalExtrasRevenue > 0): ?>
+        <div class="kpis kpis-3" style="margin-bottom:16px;">
+            <div class="kpi" style="border-color:#bbf7d0;">
+                <div class="kpi-lbl">Extras Revenue</div>
+                <div class="kpi-val c-green kpi-val--lg">₱<?php echo e(number_format($totalExtrasRevenue, 2)); ?></div>
+                <div class="kpi-hint">total collected from extras</div>
+            </div>
+            <div class="kpi" style="border-color:#fecaca;">
+                <div class="kpi-lbl">Extras Cost (COGS)</div>
+                <div class="kpi-val c-red kpi-val--lg">₱<?php echo e(number_format($totalExtrasCost, 2)); ?></div>
+                <div class="kpi-hint">what the store paid for them</div>
+            </div>
+            <div class="kpi" style="border-color:<?php echo e($totalExtrasProfit >= 0 ? '#bbf7d0' : '#fecaca'); ?>;">
+                <div class="kpi-lbl">Extras Gross Profit</div>
+                <div class="kpi-val <?php echo e($totalExtrasProfit >= 0 ? 'c-green' : 'c-red'); ?> kpi-val--lg">
+                    <?php echo e($totalExtrasProfit >= 0 ? '' : '−'); ?>₱<?php echo e(number_format(abs($totalExtrasProfit), 2)); ?>
+
+                </div>
+                <div class="kpi-hint"><?php echo e($extrasMarginPct); ?>% margin on extras</div>
+            </div>
         </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-        <div class="disc-card" style="background:#fefce8;border-color:#fde68a;">
-            <div class="disc-emoji">🧾</div>
-            <div class="disc-type">Total Discounted</div>
-            <div class="disc-count"><?php echo e(number_format($totalDiscountedGuests)); ?></div>
-            <div class="disc-amount">₱<?php echo e(number_format($summary->total_discounts, 2)); ?> total</div>
-            <div class="disc-pct">across all types</div>
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+        <div class="twocol">
+            <div>
+                <div class="col-title">🥩 Extra Items
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalExtrasRevenue > 0): ?><strong>₱<?php echo e(number_format($totalExtrasRevenue, 2)); ?></strong><?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                </div>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(empty($extrasMap)): ?>
+                    <div class="ext-box"><div style="color:#6B7280;font-size:13px;text-align:center;padding:14px 0;">No extra items sold this period.</div></div>
+                <?php else: ?>
+                
+                <div class="twrap">
+                    <table>
+                        <thead><tr>
+                            <th>#</th>
+                            <th>Item</th>
+                            <th class="c">Qty</th>
+                            <th class="r">Revenue</th>
+                            <th class="r">Cost</th>
+                            <th class="r">Profit</th>
+                            <th class="r">Margin</th>
+                        </tr></thead>
+                        <tbody>
+                            <?php $rk = 0; ?>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $extrasMap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $d): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
+                                $rk++;
+                                $margin = $d['revenue'] > 0 ? round(($d['profit'] / $d['revenue']) * 100, 1) : 0;
+                                $marginCls = $margin >= 40 ? 'tg' : ($margin >= 15 ? 'to' : 'tr');
+                            ?>
+                            <tr>
+                                <td class="c tm">#<?php echo e($rk); ?></td>
+                                <td class="tn"><?php echo e($name); ?></td>
+                                <td class="c"><?php echo e($d['qty']); ?>×</td>
+                                <td class="r tb">₱<?php echo e(number_format($d['revenue'], 2)); ?></td>
+                                <td class="r tm">₱<?php echo e(number_format($d['cost'], 2)); ?></td>
+                                <td class="r <?php echo e($d['profit'] >= 0 ? 'tg' : 'tr'); ?>">
+                                    <?php echo e($d['profit'] >= 0 ? '' : '−'); ?>₱<?php echo e(number_format(abs($d['profit']), 2)); ?>
+
+                                </td>
+                                <td class="r <?php echo e($marginCls); ?>"><?php echo e($margin); ?>%</td>
+                            </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        </tbody>
+                        <tfoot><tr>
+                            <td class="tot-label" colspan="2">Total</td>
+                            <td class="c"><?php echo e(collect($extrasMap)->sum('qty')); ?>×</td>
+                            <td class="r tot-hi">₱<?php echo e(number_format($totalExtrasRevenue, 2)); ?></td>
+                            <td class="r tot-amber">₱<?php echo e(number_format($totalExtrasCost, 2)); ?></td>
+                            <td class="r tot-hi">₱<?php echo e(number_format($totalExtrasProfit, 2)); ?></td>
+                            <td class="r tot-amber"><?php echo e($extrasMarginPct); ?>%</td>
+                        </tr></tfoot>
+                    </table>
+                </div>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalExtrasCost == 0 && $totalExtrasRevenue > 0): ?>
+                <div class="callout" style="margin-top:8px;font-size:12px;">
+                    ⚠️ Cost data is ₱0 for all extras — set a <strong>Cost Price</strong> per product in Inventory to see accurate profit figures.
+                </div>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            </div>
+            <div>
+                <div class="col-title">➕ Add-ons
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalAddonsRevenue > 0): ?><strong>₱<?php echo e(number_format($totalAddonsRevenue, 2)); ?></strong><?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                </div>
+                <?php $mxA = collect($addonsMap)->max('revenue') ?: 1; $rk = 0; ?>
+                <div class="ext-box">
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(empty($addonsMap)): ?>
+                        <div style="color:#6B7280;font-size:13px;text-align:center;padding:14px 0;">No add-ons sold this period.</div>
+                    <?php else: ?>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $addonsMap; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $name => $d): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $rk++; $bw = round(($d['revenue']/$mxA)*100); ?>
+                        <div class="ext-row">
+                            <div class="ext-rank">#<?php echo e($rk); ?></div>
+                            <div class="ext-name"><?php echo e($name); ?></div>
+                            <div class="ext-bwrap"><div class="ext-bar" style="width:<?php echo e($bw); ?>%;background:#4A90D9;"></div></div>
+                            <div class="ext-qty"><?php echo e($d['qty']); ?>×</div>
+                            <div class="ext-rev">₱<?php echo e(number_format($d['revenue'], 2)); ?></div>
+                        </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="disc-note">
-        ⚠️ <strong>Compliance note:</strong> SC and PWD discounts are mandated under Philippine law (RA 9994 & RA 7277).
-        Retain this report for BIR / DTI documentation.
+
+    <div class="section-divider"></div>
+
+    
+    <div class="stitle"><span class="stitle-num">6</span> Discount Summary</div>
+    <div class="sbody">
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($totalDiscountedGuests === 0): ?>
+            <div class="nodata">No discounts were applied during this period.</div>
+        <?php else: ?>
+            <div class="disc-grid" style="margin-bottom:12px;">
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $discountTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php $pg = $summary->total_guests > 0 ? round(($dt['count']/$summary->total_guests)*100,1) : 0; ?>
+                <div class="disc-card">
+                    <div class="disc-emoji"><?php echo e($dt['emoji']); ?></div>
+                    <div class="disc-type"><?php echo e($dt['label']); ?></div>
+                    <div class="disc-count" style="color:<?php echo e($dt['color']); ?>;font-size:28px;font-weight:800;line-height:1;"><?php echo e(number_format($dt['count'])); ?></div>
+                    <div class="disc-amount">₱<?php echo e(number_format($dt['amount'], 2)); ?> total saved</div>
+                    <div class="disc-pct"><?php echo e($pg); ?>% of all guests</div>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                <div class="disc-card" style="background:#FEF9C3;border-color:#FCD34D;">
+                    <div class="disc-emoji">🧾</div>
+                    <div class="disc-type">Total Discounted</div>
+                    <div class="disc-count"><?php echo e(number_format($totalDiscountedGuests)); ?></div>
+                    <div class="disc-amount">₱<?php echo e(number_format($summary->total_discounts, 2)); ?> total</div>
+                    <div class="disc-pct">across all discount types</div>
+                </div>
+            </div>
+            <div class="callout" style="border-color:#fbbf24;background:#fffbeb;color:#78350f;">
+                ⚠️ <strong>Legal Note:</strong> SC and PWD discounts are mandated by Philippine law (RA 9994 &amp; RA 7277).
+                Please keep this report on file for BIR / DTI documentation purposes.
+            </div>
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     </div>
-    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+    <div class="section-divider"></div>
 
     
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($orders->count() > 0): ?>
-    <div class="stitle" id="s7">
-        <span class="stitle-bar"></span> ⑦ Order Details
-        <span style="font-size:12px;font-weight:500;color:#9ca3af;text-transform:none;letter-spacing:0;">(<?php echo e($orders->count()); ?> orders)</span>
+    <div class="stitle">
+        <span class="stitle-num">7</span> Complete Order List
+        <span class="stitle-sub"><?php echo e($orders->count()); ?> orders</span>
     </div>
-    <div class="twrap">
-        <table>
-            <thead><tr>
-                <th>Receipt</th><th>Date & Time</th><th class="c">Guests</th>
-                <th>Packages</th><th class="c">Payment</th>
-                <th class="r">Subtotal</th><th class="c">Disc</th><th class="r">Total</th>
-            </tr></thead>
-            <tbody>
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <tr>
-                    <td class="tn">#<?php echo e($o->receipt_number); ?></td>
-                    <td class="tm"><?php echo e($o->completed_at->format('M j, Y · g:i A')); ?></td>
-                    <td class="c"><?php echo e($o->total_people); ?></td>
-                    <td class="tm" style="font-size:12px;">
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($o->packages)): ?>
-                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $o->packages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php echo e($pk['people']); ?>×<?php echo e($pk['name']); ?><?php echo e(!$loop->last?', ':''); ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                        <?php else: ?>—<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                    </td>
-                    <td class="c"><span class="badge <?php echo e($o->payment==='Cash'?'b-cash':'b-qr'); ?>"><?php echo e($o->payment); ?></span></td>
-                    <td class="r tm">₱<?php echo e(number_format($o->subtotal,2)); ?></td>
-                    <td class="c">
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($o->discount_percent > 0): ?><span class="tr"><?php echo e($o->discount_percent); ?>%</span>
-                        <?php else: ?><span class="tm">—</span><?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                    </td>
-                    <td class="r tb">₱<?php echo e(number_format($o->total,2)); ?></td>
-                </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-            </tbody>
-            <?php
-                $grandSubtotal  = $orders->sum('subtotal');
-                $grandDiscounts = $orders->sum('discount_amount');
-                $grandTotal     = $orders->sum('total');
-                $grandGuests    = $orders->sum('total_people');
-            ?>
-            <tfoot><tr>
-                <td class="tot-label">Grand Total</td>
-                <td class="tm" style="color:#9ca3af;font-size:11px;font-weight:600;">—</td>
-                <td class="c" style="color:#f9fafb;font-weight:700;"><?php echo e(number_format($grandGuests)); ?></td>
-                <td style="color:#9ca3af;font-size:11px;">—</td>
-                <td class="c" style="color:#9ca3af;font-size:11px;"><?php echo e($orders->count()); ?> orders</td>
-                <td class="r tot-warn">₱<?php echo e(number_format($grandSubtotal, 2)); ?></td>
-                <td class="c tot-warn">₱<?php echo e(number_format($grandDiscounts, 2)); ?></td>
-                <td class="r tot-hi">₱<?php echo e(number_format($grandTotal, 2)); ?></td>
-            </tr></tfoot>
-        </table>
+    <div class="sbody">
+        <div class="twrap">
+            <table>
+                <thead><tr>
+                    <th>Receipt #</th><th>Date & Time</th><th class="c">Guests</th>
+                    <th>Package(s)</th><th class="c">Payment</th>
+                    <th class="r">Before Disc.</th><th class="c">Disc %</th><th class="r">Total Paid</th>
+                </tr></thead>
+                <tbody>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tr>
+                        <td class="tn">#<?php echo e($o->receipt_number); ?></td>
+                        <td class="tm"><?php echo e($o->completed_at->format('M j, Y · g:i A')); ?></td>
+                        <td class="c"><?php echo e($o->total_people); ?></td>
+                        <td class="tm" style="font-size:12px;">
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!empty($o->packages)): ?>
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $o->packages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php echo e($pk['people']); ?>×<?php echo e($pk['name']); ?><?php echo e(!$loop->last?', ':''); ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                            <?php else: ?>—<?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        </td>
+                        <td class="c"><span class="badge <?php echo e($o->payment==='Cash'?'b-cash':'b-qr'); ?>"><?php echo e($o->payment); ?></span></td>
+                        <td class="r tm">₱<?php echo e(number_format($o->subtotal,2)); ?></td>
+                        <td class="c">
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($o->discount_percent > 0): ?><span class="tr"><?php echo e($o->discount_percent); ?>%</span>
+                            <?php else: ?><span class="tm">—</span><?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        </td>
+                        <td class="r tb">₱<?php echo e(number_format($o->total,2)); ?></td>
+                    </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                </tbody>
+                <?php
+                    $grandSubtotal  = $orders->sum('subtotal');
+                    $grandDiscounts = $orders->sum('discount_amount');
+                    $grandTotal     = $orders->sum('total');
+                    $grandGuests    = $orders->sum('total_people');
+                ?>
+                <tfoot><tr>
+                    <td class="tot-label">Grand Total</td>
+                    <td></td>
+                    <td class="c"><?php echo e(number_format($grandGuests)); ?></td>
+                    <td></td>
+                    <td class="c tot-label"><?php echo e($orders->count()); ?> orders</td>
+                    <td class="r tot-amber">₱<?php echo e(number_format($grandSubtotal, 2)); ?></td>
+                    <td class="c tot-amber">₱<?php echo e(number_format($grandDiscounts, 2)); ?></td>
+                    <td class="r tot-hi">₱<?php echo e(number_format($grandTotal, 2)); ?></td>
+                </tr></tfoot>
+            </table>
+        </div>
     </div>
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?> 
 
+    <div class="section-divider"></div>
+
     
-    <div class="stitle" id="s8"><span class="stitle-bar"></span> ⑧ Opening vs Closing Stock</div>
-
-    <?php
-        $byCategory   = collect($stockSnapshot)->groupBy('category');
-        $changedCount = collect($stockSnapshot)->filter(fn($r) => $r['had_movements'])->count();
-    ?>
-
-    <div class="kpis" style="margin-bottom:28px;">
-        <div class="kpi"><div class="kpi-lbl">Products Tracked</div><div class="kpi-val blue"><?php echo e(count($stockSnapshot)); ?></div></div>
-        <div class="kpi"><div class="kpi-lbl">Had Changes</div><div class="kpi-val <?php echo e($changedCount > 0 ? 'orange' : 'green'); ?>"><?php echo e($changedCount); ?></div></div>
-        <div class="kpi"><div class="kpi-lbl">No Changes</div><div class="kpi-val"><?php echo e(count($stockSnapshot) - $changedCount); ?></div></div>
-    </div>
-
-    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(empty($stockSnapshot)): ?>
-        <div class="nodata">No products found.</div>
-    <?php else: ?>
-        
-        <div class="screen-only">
-            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $byCategory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category => $items): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="cat-head"><?php echo e($category); ?></div>
-            <div class="stock-cards">
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <?php
-                    $net    = $row['net_change'];
-                    $pfx    = $net > 0 ? '+' : '';
-                    $netCls = $net > 0 ? 'tg' : ($net < 0 ? 'tr' : 'tm');
-                    $dimmed = !$row['had_movements'] ? 'dimmed' : '';
-                ?>
-                <div class="stock-card <?php echo e($dimmed); ?>">
-                    <div class="sc-name"><?php echo e($row['name']); ?><span><?php echo e($row['unit']); ?></span></div>
-                    <div class="sc-open">
-                        <div class="sc-open-lbl">🌅 Opening</div>
-                        <div class="sc-open-val"><?php echo e(number_format($row['opening_stock'], 2)); ?></div>
-                        <div class="sc-open-unit"><?php echo e($row['unit']); ?></div>
-                    </div>
-                    <div class="sc-arrow">→</div>
-                    <div class="sc-close">
-                        <div class="sc-close-lbl">🌇 Closing</div>
-                        <div class="sc-close-val"><?php echo e(number_format($row['closing_stock'], 2)); ?></div>
-                        <div class="sc-close-unit"><?php echo e($row['unit']); ?></div>
-                    </div>
-                    <div class="sc-change">
-                        <div class="sc-change-lbl">Change</div>
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($row['had_movements']): ?>
-                            <div class="sc-change-val <?php echo e($netCls); ?>"><?php echo e($pfx); ?><?php echo e(number_format($net, 2)); ?></div>
-                        <?php else: ?>
-                            <div class="sc-change-val tm">—</div>
-                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                    </div>
-                    <div class="sc-status">
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!$row['had_movements']): ?><span class="badge b-same">No change</span>
-                        <?php elseif($net < 0): ?><span class="badge b-out">▼ Used</span>
-                        <?php elseif($net > 0): ?><span class="badge b-in">▲ Restocked</span>
-                        <?php else: ?><span class="badge b-same">Balanced</span>
-                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                    </div>
-                </div>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+    <div class="stitle"><span class="stitle-num">8</span> Inventory &amp; Stock Status</div>
+    <div class="sbody">
+        <div class="callout">
+            🗃️ <strong>Color guide:</strong> <span style="color:#991b1b;font-weight:700;">Red</span> = out of stock &nbsp;|&nbsp;
+            <span style="color:#92400e;font-weight:700;">Orange</span> = low, restock soon &nbsp;|&nbsp;
+            <span style="color:#166534;font-weight:700;">Green</span> = OK. &nbsp;
+            💰 <strong>Inventory Value</strong> = current stock × cost price (how much capital is in your stockroom).
+            &nbsp;The <strong>Opening</strong> and <strong>Closing</strong> columns show stock at the start and end of the selected period.
+        </div>
+        <div class="kpis kpis-4">
+            <div class="kpi">
+                <div class="kpi-lbl">Total Items</div>
+                <div class="kpi-val c-blue"><?php echo e($inventory->count()); ?></div>
+                <div class="kpi-hint">products in inventory</div>
             </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <div class="kpi" style="<?php echo e($lowStockCount > 0 ? 'border-color:#fed7aa;' : 'border-color:#bbf7d0;'); ?>">
+                <div class="kpi-lbl">⚠️ Low Stock</div>
+                <div class="kpi-val <?php echo e($lowStockCount > 0 ? 'c-orange' : 'c-green'); ?>"><?php echo e($lowStockCount); ?></div>
+                <div class="kpi-hint">need to restock soon</div>
+            </div>
+            <div class="kpi" style="<?php echo e($outOfStockCount > 0 ? 'border-color:#fecaca;' : 'border-color:#bbf7d0;'); ?>">
+                <div class="kpi-lbl">🔴 Out of Stock</div>
+                <div class="kpi-val <?php echo e($outOfStockCount > 0 ? 'c-red' : 'c-green'); ?>"><?php echo e($outOfStockCount); ?></div>
+                <div class="kpi-hint">empty, order immediately</div>
+            </div>
+            <?php
+                $invValStr = '₱' . number_format($totalInventoryValue, 2);
+                $invValCls = strlen($invValStr) > 12 ? 'kpi-val--xl' : (strlen($invValStr) > 9 ? 'kpi-val--lg' : '');
+            ?>
+            <div class="kpi" style="border-color:#bbf7d0;">
+                <div class="kpi-lbl">Estimated Total Value</div>
+                <div class="kpi-val c-green <?php echo e($invValCls); ?>"><?php echo e($invValStr); ?></div>
+                <div class="kpi-hint">cost × current stock</div>
+            </div>
         </div>
 
-        
-        <div class="print-only">
-            <div class="twrap">
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($inventory->isEmpty()): ?>
+            <div class="nodata">No inventory items found.</div>
+        <?php else: ?>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $inventoryByCategory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category => $items): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php $catValue = $items->sum(fn($i) => (float)$i->stock * (float)$i->cost); ?>
+            <div class="twrap" style="margin-bottom:14px;">
                 <table>
-                    <thead><tr>
-                        <th>Item</th>
-                        <th class="c">Unit</th>
-                        <th class="r">Opening</th>
-                        <th class="r">Closing</th>
-                        <th class="r">Change</th>
-                        <th class="c">Status</th>
-                    </tr></thead>
-                    <tbody>
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = collect($stockSnapshot)->groupBy('category'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category => $rows): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <tr class="print-cat-row">
-                            <td colspan="6" style="background:#1f2937;color:#e5e7eb;font-weight:700;font-size:7pt;text-transform:uppercase;letter-spacing:0.5pt;padding:3pt 5pt;"><?php echo e($category); ?></td>
+                    <thead>
+                        <tr>
+                            <th colspan="9" style="background:#374151;color:#E5E7EB;font-size:10px;letter-spacing:1px;font-weight:700;">
+                                📁 <?php echo e(strtoupper($category)); ?> — <?php echo e($items->count()); ?> items &nbsp;·&nbsp; Subtotal: ₱<?php echo e(number_format($catValue, 2)); ?>
+
+                            </th>
                         </tr>
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $rows; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr>
+                            <th>Item Name</th>
+                            <th class="c">Unit</th>
+                            <th class="r">Opening Stock</th>
+                            <th class="r">Closing Stock</th>
+                            <th class="r">Change</th>
+                            <th class="r">Reorder At</th>
+                            <th class="r">Cost / Unit</th>
+                            <th class="r">Total Value</th>
+                            <th class="c">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <?php
-                            $net    = $row['net_change'];
-                            $pfx    = $net > 0 ? '+' : '';
-                            $netCls = $net > 0 ? 'tg' : ($net < 0 ? 'tr' : 'tm');
+                            $oos        = (float)$item->stock <= 0;
+                            $low        = !$oos && $item->is_low_stock;
+                            $slabel     = $oos ? 'Out of Stock' : ($low ? 'Low Stock' : 'OK');
+                            $sbadge     = $oos ? 'b-zero' : ($low ? 'b-low' : 'b-ok');
+                            $scls       = $oos ? 'tr' : ($low ? 'to' : 'tg');
+                            $ival       = (float)$item->stock * (float)$item->cost;
+                            // Single snapshot lookup (not two separate calls)
+                            $snap       = collect($stockSnapshot)->firstWhere('name', $item->name);
+                            $openingStk = $snap ? (float)$snap['opening_stock'] : (float)$item->stock;
+                            $closingStk = $snap ? (float)$snap['closing_stock']  : (float)$item->stock;
+                            $hadMov     = $snap ? (bool)$snap['had_movements']   : false;
+                            $netChg     = $closingStk - $openingStk;
+                            $netPfx     = $netChg > 0 ? '+' : '';
+                            $netCls     = $netChg > 0 ? 'tg' : ($netChg < 0 ? 'tr' : 'tm');
+                            $closingCls = $closingStk <= 0 ? 'tr' : (($item->reorder_level > 0 && $closingStk <= (float)$item->reorder_level) ? 'to' : 'tg');
                         ?>
                         <tr>
-                            <td class="tn"><?php echo e($row['name']); ?></td>
-                            <td class="c tm"><?php echo e($row['unit']); ?></td>
-                            <td class="r"><?php echo e(number_format($row['opening_stock'], 2)); ?></td>
-                            <td class="r tb"><?php echo e(number_format($row['closing_stock'], 2)); ?></td>
-                            <td class="r <?php echo e($netCls); ?>"><?php echo e($row['had_movements'] ? $pfx.number_format($net,2) : '—'); ?></td>
-                            <td class="c">
-                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!$row['had_movements']): ?><span class="badge b-same">No change</span>
-                                <?php elseif($net < 0): ?><span class="badge b-out">▼ Used</span>
-                                <?php elseif($net > 0): ?><span class="badge b-in">▲ Restocked</span>
-                                <?php else: ?><span class="badge b-same">—</span>
-                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                            </td>
+                            <td class="tn"><?php echo e($item->name); ?></td>
+                            <td class="c tm"><?php echo e($item->unit); ?></td>
+                            <td class="r tg"><?php echo e(number_format($openingStk, 2)); ?></td>
+                            <td class="r" style="font-weight:700;color:#1D4ED8;"><?php echo e(number_format($closingStk, 2)); ?></td>
+                            <td class="r <?php echo e($netCls); ?>"><?php echo e($hadMov ? $netPfx.number_format($netChg,2) : '—'); ?></td>
+                            <td class="r tm"><?php echo e(number_format((float)$item->reorder_level, 2)); ?></td>
+                            <td class="r tm">₱<?php echo e(number_format((float)$item->cost, 2)); ?></td>
+                            <td class="r tb">₱<?php echo e(number_format($ival, 2)); ?></td>
+                            <td class="c"><span class="badge <?php echo e($sbadge); ?>"><?php echo e($slabel); ?></span></td>
                         </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </tbody>
                 </table>
             </div>
-        </div>
-    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-    
-    <div class="stitle" id="s9"><span class="stitle-bar"></span> ⑨ Inventory Snapshot</div>
-
-    <div class="kpis" style="margin-bottom:24px;">
-        <div class="kpi"><div class="kpi-lbl">Total SKUs</div><div class="kpi-val blue"><?php echo e($inventory->count()); ?></div></div>
-        <div class="kpi"><div class="kpi-lbl">Low Stock</div><div class="kpi-val <?php echo e($lowStockCount > 0 ? 'orange' : 'green'); ?>"><?php echo e($lowStockCount); ?></div></div>
-        <div class="kpi"><div class="kpi-lbl">Out of Stock</div><div class="kpi-val <?php echo e($outOfStockCount > 0 ? 'red' : 'green'); ?>"><?php echo e($outOfStockCount); ?></div></div>
-        <div class="kpi"><div class="kpi-lbl">Est. Inventory Value</div>
-            <?php $invValStr = '₱' . number_format($totalInventoryValue, 2);
-                 $invValCls = strlen($invValStr) > 12 ? 'kpi-val--xl' : (strlen($invValStr) > 9 ? 'kpi-val--lg' : '');
-            ?>
-            <div class="kpi-val green <?php echo e($invValCls); ?>"><?php echo e($invValStr); ?></div>
-        </div>
+            
+            <div class="grand-panel">
+                <div class="grand-panel-head">📦 &nbsp;Grand Total Inventory Value</div>
+                <div class="grand-panel-body">
+                    <div class="grand-cell">
+                        <div class="grand-cell-lbl">Total Items</div>
+                        <div class="grand-cell-val"><?php echo e($inventory->count()); ?></div>
+                    </div>
+                    <div class="grand-cell">
+                        <div class="grand-cell-lbl">Low Stock Items</div>
+                        <div class="grand-cell-val" style="<?php echo e($lowStockCount > 0 ? 'color:#fbbf24;' : 'color:#6ee7b7;'); ?>"><?php echo e($lowStockCount); ?></div>
+                    </div>
+                    <div class="grand-cell">
+                        <div class="grand-cell-lbl">Out of Stock</div>
+                        <div class="grand-cell-val" style="<?php echo e($outOfStockCount > 0 ? 'color:#f87171;' : 'color:#6ee7b7;'); ?>"><?php echo e($outOfStockCount); ?></div>
+                    </div>
+                    <div class="grand-cell">
+                        <div class="grand-cell-lbl">🏆 Total Inventory Value</div>
+                        <div class="grand-cell-val">₱<?php echo e(number_format($totalInventoryValue, 2)); ?></div>
+                        <div class="grand-cell-sub">estimated at cost price</div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     </div>
 
-    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($inventory->isEmpty()): ?>
-        <div class="nodata">No inventory items found.</div>
-    <?php else: ?>
-        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $inventoryByCategory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category => $items): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <?php $catValue = $items->sum(fn($i) => (float)$i->stock * (float)$i->cost); ?>
-        <div class="cat-head"><?php echo e($category); ?></div>
-        <div class="twrap" style="margin-bottom:24px;">
-            <table>
-                <thead><tr>
-                    <th>Item</th>
-                    <th class="r">Current Stock</th>
-                    <th class="r" style="background:#1a3a2a;color:#4ade80;">Stocks Left<br><span style="font-size:9px;opacity:0.8;">End of Day</span></th>
-                    <th class="c">Unit</th>
-                    <th class="r" style="background:#1a2a3a;color:#60a5fa;">Order Point<br><span style="font-size:9px;opacity:0.8;">Reorder At</span></th>
-                    <th class="r">Cost / Unit</th>
-                    <th class="r">Total Value</th>
-                    <th class="c">Status</th>
-                </tr></thead>
-                <tbody>
-                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <?php
-                        $oos      = (float)$item->stock <= 0;
-                        $low      = !$oos && $item->is_low_stock;
-                        $slabel   = $oos ? 'Out of Stock' : ($low ? 'Low Stock' : 'OK');
-                        $sbadge   = $oos ? 'b-zero' : ($low ? 'b-low' : 'b-ok');
-                        $scls     = $oos ? 'tr' : ($low ? 'to' : 'tg');
-                        $ival     = (float)$item->stock * (float)$item->cost;
-                        // Find closing stock from snapshot for this item
-                        $snapRow     = collect($stockSnapshot)->firstWhere('name', $item->name);
-                        $closingStk  = $snapRow ? $snapRow['closing_stock'] : (float)$item->stock;
-                        $closingCls  = $closingStk <= 0 ? 'tr' : (($item->reorder_level > 0 && $closingStk <= (float)$item->reorder_level) ? 'to' : 'tg');
-                    ?>
-                    <tr>
-                        <td class="tn"><?php echo e($item->name); ?></td>
-                        <td class="r inv-stock-val <?php echo e($scls); ?>"><?php echo e(number_format((float)$item->stock, 2)); ?></td>
-                        <td class="r inv-stock-val <?php echo e($closingCls); ?>" style="background:#f0fdf4;"><?php echo e(number_format($closingStk, 2)); ?></td>
-                        <td class="c tm"><?php echo e($item->unit); ?></td>
-                        <td class="r" style="background:#eff6ff;font-weight:700;color:#1d4ed8;"><?php echo e(number_format((float)$item->reorder_level, 2)); ?></td>
-                        <td class="r tm">₱<?php echo e(number_format((float)$item->cost, 2)); ?></td>
-                        <td class="r tb">₱<?php echo e(number_format($ival, 2)); ?></td>
-                        <td class="c"><span class="badge <?php echo e($sbadge); ?>"><?php echo e($slabel); ?></span></td>
-                    </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                </tbody>
-                <tfoot><tr>
-                    <td class="tot-label" colspan="7"><?php echo e($items->count()); ?> items · <?php echo e($category); ?> subtotal</td>
-                    <td class="r tot-hi">₱<?php echo e(number_format($catValue, 2)); ?></td>
-                </tr></tfoot>
-            </table>
-        </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-
-        
-        <div class="inv-grand-total" style="margin: 0 48px 28px; background: #1f2937; border-radius: 10px; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="color:#9ca3af; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px;">
-                📦 &nbsp;Grand Total Inventory Value
-            </div>
-            <div style="color:#4ade80; font-size:24px; font-weight:900;">
-                ₱<?php echo e(number_format($totalInventoryValue, 2)); ?>
-
-            </div>
-        </div>
-    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-
-    
     <div class="spacer"></div>
 
-    <?php
-        $grandSubtotalFtr  = isset($orders) ? $orders->sum('subtotal')       : 0;
-        $grandDiscountsFtr = isset($orders) ? $orders->sum('discount_amount') : 0;
-        $grandTotalFtr     = isset($orders) ? $orders->sum('total')           : 0;
-        $grandGuestsFtr    = isset($orders) ? $orders->sum('total_people')    : 0;
-        $orderCountFtr     = isset($orders) ? $orders->count()                : 0;
-    ?>
 
-    
-    <div style="margin:0 48px 28px;border:2px solid #1f2937;border-radius:12px;overflow:hidden;">
-        <div style="background:#1f2937;padding:12px 20px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;">
-            📊 &nbsp;Page Totals &amp; Grand Total
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);background:#fff;">
-            <div style="padding:16px 20px;border-right:1px solid #e5e7eb;">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#9ca3af;margin-bottom:6px;">Total Orders</div>
-                <div style="font-size:26px;font-weight:900;color:#2563eb;"><?php echo e(number_format($orderCountFtr)); ?></div>
-            </div>
-            <div style="padding:16px 20px;border-right:1px solid #e5e7eb;">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#9ca3af;margin-bottom:6px;">Total Guests</div>
-                <div style="font-size:26px;font-weight:900;color:#7c3aed;"><?php echo e(number_format($grandGuestsFtr)); ?></div>
-            </div>
-            <div style="padding:16px 20px;border-right:1px solid #e5e7eb;">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#9ca3af;margin-bottom:6px;">Total Discounts</div>
-                <div style="font-size:22px;font-weight:900;color:#dc2626;">₱<?php echo e(number_format($grandDiscountsFtr, 2)); ?></div>
-            </div>
-            <div style="padding:16px 20px;background:#f0fdf4;">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#166534;margin-bottom:6px;">🏆 Grand Total Revenue</div>
-                <div style="font-size:22px;font-weight:900;color:#16a34a;">₱<?php echo e(number_format($grandTotalFtr, 2)); ?></div>
-                <div style="font-size:11px;color:#9ca3af;margin-top:4px;">Before discounts: ₱<?php echo e(number_format($grandSubtotalFtr, 2)); ?></div>
-            </div>
-        </div>
-    </div>
 
     
     <div class="rfooter">
-        <div style="flex:1;">
-            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;margin-bottom:4px;">SamgyHann 199 POS &nbsp;·&nbsp; Olongapo City, Zambales</div>
-            <div style="font-size:11px;color:#6b7280;">Period: <?php echo e($periodLabel); ?></div>
+        <div>
+            <div style="font-weight:700;color:#111827;margin-bottom:3px;">SamgyHann 199 POS &nbsp;·&nbsp; Olongapo City, Zambales</div>
+            <div>Period: <strong><?php echo e($periodLabel); ?></strong> &nbsp;(<?php echo e($reportStartDate); ?> – <?php echo e($reportEndDate); ?>)</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:11px;color:#6b7280;">
-            <div><strong style="color:#374151;">🖨️ Printed On:</strong> &nbsp;<?php echo e($printedOn); ?></div>
-            <div><strong style="color:#374151;">📋 Effectivity Date:</strong> &nbsp;<?php echo e($reportStartDate); ?> – <?php echo e($reportEndDate); ?></div>
+        <div style="text-align:right;">
+            <div>Printed: <strong><?php echo e($printedOn); ?></strong></div>
+            <div>Prepared by: <strong><?php echo e($generatedBy); ?></strong></div>
         </div>
     </div>
 
     
-    <div style="margin:0 48px 40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;">
-        <div>
-            <div style="border-top:2px solid #374151;padding-top:10px;margin-top:40px;">
-                <div style="font-size:12px;font-weight:700;color:#111827;"><?php echo e($generatedBy); ?></div>
-                <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;margin-top:3px;">Prepared By</div>
+    <div class="sbody" style="padding-top:0;padding-bottom:32px;">
+        <div class="sig-grid">
+            <div>
+                <div class="sig-line">
+                    <div class="sig-name"><?php echo e($generatedBy); ?></div>
+                    <div class="sig-role">Prepared By</div>
+                </div>
             </div>
-        </div>
-        <div>
-            <div style="border-top:2px solid #d1d5db;padding-top:10px;margin-top:40px;">
-                <div style="font-size:12px;font-weight:700;color:#6b7280;">&nbsp;</div>
-                <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;margin-top:3px;">Received By</div>
+            <div>
+                <div class="sig-line">
+                    <div class="sig-name">&nbsp;</div>
+                    <div class="sig-role">Received By</div>
+                </div>
             </div>
-        </div>
-        <div>
-            <div style="border-top:2px solid #d1d5db;padding-top:10px;margin-top:40px;">
-                <div style="font-size:12px;font-weight:700;color:#6b7280;">&nbsp;</div>
-                <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;margin-top:3px;">Noted By / Approved By</div>
+            <div>
+                <div class="sig-line">
+                    <div class="sig-name">&nbsp;</div>
+                    <div class="sig-role">Noted By / Approved By</div>
+                </div>
             </div>
         </div>
     </div>
-
 
 </div>
 
 
 <div class="pgfooter">
-    <span>SamgyHann 199 &nbsp;·&nbsp; Olongapo City, Zambales &nbsp;·&nbsp; <?php echo e($periodLabel); ?></span>
+    <span>SamgyHann 199 &nbsp;·&nbsp; Sales Report &nbsp;·&nbsp; <?php echo e($periodLabel); ?></span>
     <span>Printed: <?php echo e($printedOn); ?></span>
 </div>
 

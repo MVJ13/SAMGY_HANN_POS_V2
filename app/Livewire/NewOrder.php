@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\StockMovement;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -32,13 +33,16 @@ class NewOrder extends Component
 
         // Per-person discounts (senior/pwd = 20%, child = 10% off their package price)
         $discountPersons = $payload['discountPersons'] ?? [];
-        $pkgPriceMap = ['p199' => 199, 'p269' => 269, 'p349' => 349];
+        $prices      = Setting::packagePrices();
+        $pkgPriceMap = ['p199' => $prices['basic'], 'p269' => $prices['premium'], 'p349' => $prices['deluxe']];
+        $addonPrice  = $prices['addon'];
 
         $totalPeople     = $people199 + $people269 + $people349;
-        $packageSubtotal = ($people199 * 199) + ($people269 * 269) + ($people349 * 349);
-        $addonSubtotal   = ($icedTeaPeople * 25) + ($cheesePeople * 25);
+        $packageSubtotal = ($people199 * $pkgPriceMap['p199']) + ($people269 * $pkgPriceMap['p269']) + ($people349 * $pkgPriceMap['p349']);
+        $addonSubtotal   = ($icedTeaPeople * $addonPrice) + ($cheesePeople * $addonPrice);
 
-        $extraProducts  = Product::extras()->get()->keyBy('id');
+        // Only allow available extras — prevents expired items being submitted
+        $extraProducts  = Product::extras()->get()->filter(fn($p) => $p->is_available_now)->keyBy('id');
         $extrasSubtotal = 0;
         $extrasBreakdown = [];
 
@@ -50,12 +54,13 @@ class NewOrder extends Component
             $amount           = $qty * (float) $product->selling_price;
             $extrasSubtotal  += $amount;
             $extrasBreakdown[] = [
-                'id'       => $product->id,
-                'name'     => $product->name,
-                'category' => $product->category,
-                'price'    => (float) $product->selling_price,
-                'qty'      => $qty,
-                'amount'   => $amount,
+                'id'         => $product->id,
+                'name'       => $product->name,
+                'category'   => $product->category,
+                'cost_price' => (float) $product->cost,           // locked-in at time of sale for accurate historical P&L
+                'price'      => (float) $product->selling_price,  // selling price locked-in at time of sale
+                'qty'        => $qty,
+                'amount'     => $amount,
             ];
         }
 
@@ -83,13 +88,13 @@ class NewOrder extends Component
         $total           = round($subtotal - $discountAmount, 2);
 
         $packagesBreakdown = [];
-        if ($people199 > 0) $packagesBreakdown[] = ['name' => 'Basic',   'price' => 199, 'people' => $people199, 'amount' => $people199 * 199];
-        if ($people269 > 0) $packagesBreakdown[] = ['name' => 'Premium', 'price' => 269, 'people' => $people269, 'amount' => $people269 * 269];
-        if ($people349 > 0) $packagesBreakdown[] = ['name' => 'Deluxe',  'price' => 349, 'people' => $people349, 'amount' => $people349 * 349];
+        if ($people199 > 0) $packagesBreakdown[] = ['name' => 'Basic',   'price' => $pkgPriceMap['p199'], 'people' => $people199, 'amount' => $people199 * $pkgPriceMap['p199']];
+        if ($people269 > 0) $packagesBreakdown[] = ['name' => 'Premium', 'price' => $pkgPriceMap['p269'], 'people' => $people269, 'amount' => $people269 * $pkgPriceMap['p269']];
+        if ($people349 > 0) $packagesBreakdown[] = ['name' => 'Deluxe',  'price' => $pkgPriceMap['p349'], 'people' => $people349, 'amount' => $people349 * $pkgPriceMap['p349']];
 
         $addonsBreakdown = [];
-        if ($icedTeaPeople > 0) $addonsBreakdown[] = ['name' => 'Unlimited Iced Tea', 'price' => 25, 'people' => $icedTeaPeople, 'amount' => $icedTeaPeople * 25];
-        if ($cheesePeople  > 0) $addonsBreakdown[] = ['name' => 'Unlimited Cheese',   'price' => 25, 'people' => $cheesePeople,  'amount' => $cheesePeople  * 25];
+        if ($icedTeaPeople > 0) $addonsBreakdown[] = ['name' => 'Unlimited Iced Tea', 'price' => $addonPrice, 'people' => $icedTeaPeople, 'amount' => $icedTeaPeople * $addonPrice];
+        if ($cheesePeople  > 0) $addonsBreakdown[] = ['name' => 'Unlimited Cheese',   'price' => $addonPrice, 'people' => $cheesePeople,  'amount' => $cheesePeople  * $addonPrice];
 
         return compact(
             'totalPeople', 'subtotal', 'discountAmount', 'total', 'discountPercent',
@@ -124,46 +129,53 @@ class NewOrder extends Component
             return;
         }
 
-        // Create the order
-        $created = Order::create([
-            'total_people'     => $data['totalPeople'],
-            'packages'         => $data['packagesBreakdown'],
-            'addons'           => array_values(array_map(
-                fn($a) => ['name' => $a['name'], 'price' => $a['price'], 'people' => $a['people']],
-                $data['addonsBreakdown']
-            )),
-            'extra_items'      => array_values(array_map(
-                fn($e) => ['name' => $e['name'], 'category' => $e['category'], 'price' => $e['price'], 'qty' => $e['qty'], 'amount' => $e['amount']],
-                $data['extrasBreakdown']
-            )),
-            'subtotal'         => $data['subtotal'],
-            'discount_percent' => $data['discountPercent'],
-            'discount_amount'  => $data['discountAmount'],
-            'discount_persons' => $data['discountPersonsSanitized'],
-            'total'            => $data['total'],
-            'payment'          => $payment,
-            'amount_received'  => $payment === 'Cash' ? $amountReceived : $data['total'],
-            'change_given'     => $payment === 'Cash' ? max(0, round($amountReceived - $data['total'], 2)) : 0,
-            'status'           => 'active',
-        ]);
-
-        // Deduct stock for extras
-        foreach ($data['extrasBreakdown'] as $item) {
-            $product = Product::find($item['id']);
-            if (!$product) continue;
-            $prev     = (float) $product->stock;
-            $newStock = max(0, $prev - $item['qty']);
-            $product->update(['stock' => $newStock]);
-            StockMovement::create([
-                'product_id'     => $product->id,
-                'product_name'   => $product->name,
-                'type'           => 'out',
-                'quantity'       => $item['qty'],
-                'previous_stock' => $prev,
-                'new_stock'      => $newStock,
-                'notes'          => 'Sold via order #' . $created->receipt_number,
+        // Create order + deduct stock atomically
+        $created = \DB::transaction(function () use ($data, $payment, $amountReceived) {
+            $order = Order::create([
+                'total_people'     => $data['totalPeople'],
+                'packages'         => $data['packagesBreakdown'],
+                'addons'           => array_values(array_map(
+                    fn($a) => ['name' => $a['name'], 'price' => $a['price'], 'people' => $a['people']],
+                    $data['addonsBreakdown']
+                )),
+                'extra_items'      => array_values(array_map(
+                    // id: for cancel stock reversal by product ID (resilient to renames)
+                    // cost_price: locked-in at sale time so P&L stays accurate if costs change later
+                    fn($e) => ['id' => $e['id'], 'name' => $e['name'], 'category' => $e['category'], 'cost_price' => $e['cost_price'], 'price' => $e['price'], 'qty' => $e['qty'], 'amount' => $e['amount']],
+                    $data['extrasBreakdown']
+                )),
+                'subtotal'         => $data['subtotal'],
+                'discount_percent' => $data['discountPercent'],
+                'discount_amount'  => $data['discountAmount'],
+                'discount_persons' => $data['discountPersonsSanitized'],
+                'total'            => $data['total'],
+                'payment'          => $payment,
+                'amount_received'  => $payment === 'Cash' ? $amountReceived : $data['total'],
+                'change_given'     => $payment === 'Cash' ? max(0, round($amountReceived - $data['total'], 2)) : 0,
+                'status'           => 'active',
             ]);
-        }
+
+            // Deduct stock for extras
+            foreach ($data['extrasBreakdown'] as $item) {
+                $product = Product::find($item['id']);
+                if (!$product) continue;
+                $prev     = (float) $product->stock;
+                $newStock = max(0, $prev - $item['qty']);
+                $product->update(['stock' => $newStock]);
+                StockMovement::create([
+                    'product_id'     => $product->id,
+                    'product_name'   => $product->name,
+                    'type'           => 'out',
+                    'quantity'       => $item['qty'],
+                    'unit_cost'      => $item['cost_price'], // locked-in cost at time of sale
+                    'previous_stock' => $prev,
+                    'new_stock'      => $newStock,
+                    'notes'          => 'Sold via order #' . $order->receipt_number,
+                ]);
+            }
+
+            return $order;
+        });
 
         // Push fresh stock to the frontend immediately after deducting
         $this->getExtras();
@@ -199,6 +211,8 @@ class NewOrder extends Component
             ->orderBy('category')
             ->orderBy('name')
             ->get()
+            ->filter(fn($p) => $p->is_available_now)
+            ->values()
             ->map(fn($p) => [
                 'id'       => $p->id,
                 'name'     => $p->name,
@@ -212,14 +226,16 @@ class NewOrder extends Component
         $this->dispatch('extras-sync', products: $extras);
     }
 
-        public function render()
+    public function render()
     {
         $extraProducts = Product::extras()
             ->orderBy('category')
             ->orderBy('name')
             ->get()
+            ->filter(fn($p) => $p->is_available_now)
             ->groupBy('category');
 
-        return view('livewire.new-order', compact('extraProducts'));
+        $prices = Setting::packagePrices();
+        return view('livewire.new-order', compact('extraProducts', 'prices'));
     }
 }

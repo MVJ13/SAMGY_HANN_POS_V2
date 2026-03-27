@@ -27,7 +27,10 @@ class Inventory extends Component
                 'reorder_level' => (float) $p->reorder_level,
                 'is_extra'      => (bool)  $p->is_extra,
                 'selling_price' => (float) $p->selling_price,
-                'is_low_stock'  => (bool)  $p->is_low_stock,
+                'is_low_stock'    => (bool)   $p->is_low_stock,
+                'is_available_now' => (bool)   $p->is_available_now,
+                'available_from'   => $p->available_from  ? $p->available_from->format('Y-m-d')  : '',
+                'available_until'  => $p->available_until ? $p->available_until->format('Y-m-d') : '',
             ])->values()->toArray(),
 
             'lowStock' => $products
@@ -40,6 +43,8 @@ class Inventory extends Component
                 'product_name'   => $m->product_name,
                 'type'           => $m->type,
                 'quantity'       => (float) $m->quantity,
+                'unit_cost'      => (float) $m->unit_cost,
+                'total_cost'     => round((float) $m->quantity * (float) $m->unit_cost, 2),
                 'previous_stock' => (float) $m->previous_stock,
                 'new_stock'      => (float) $m->new_stock,
                 'notes'          => $m->notes ?? '',
@@ -56,6 +61,20 @@ class Inventory extends Component
     }
 
     #[Renderless]
+    #[On('order-cancelled')]
+    public function refreshFromCancellation(): void
+    {
+        $this->syncAll();
+    }
+
+    #[Renderless]
+    #[On('system-reset')]
+    public function refreshFromReset(): void
+    {
+        $this->syncAll();
+    }
+
+    #[Renderless]
     public function saveProduct(?array $data): void
     {
         if (!$data) return;
@@ -63,15 +82,46 @@ class Inventory extends Component
         $id      = $data['id']      ?? null;
         $isExtra = (bool) ($data['is_extra'] ?? false);
 
+        // Bug C fix: validate date strings before persisting — malformed dates cause a DB error,
+        // and available_until must not be before available_from.
+        $availableFrom  = null;
+        $availableUntil = null;
+
+        if (!empty($data['available_from'])) {
+            try {
+                $availableFrom = \Carbon\Carbon::createFromFormat('Y-m-d', $data['available_from'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $this->dispatch('product-save-error', message: 'Invalid "Available From" date format.');
+                return;
+            }
+        }
+
+        if (!empty($data['available_until'])) {
+            try {
+                $availableUntil = \Carbon\Carbon::createFromFormat('Y-m-d', $data['available_until'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $this->dispatch('product-save-error', message: 'Invalid "Available Until" date format.');
+                return;
+            }
+        }
+
+        if ($availableFrom && $availableUntil && $availableUntil < $availableFrom) {
+            $this->dispatch('product-save-error', message: '"Available Until" must be on or after "Available From".');
+            return;
+        }
+
         $validated = [
-            'name'          => trim($data['name']          ?? ''),
-            'category'      => trim($data['category']      ?? 'Meat'),
+            // Fix #2: strip_tags prevents stored XSS in product names surfacing in reports/receipts
+            'name'          => strip_tags(trim($data['name']     ?? '')),
+            'category'      => strip_tags(trim($data['category'] ?? 'Meat')),
+            'unit'          => strip_tags(trim($data['unit']     ?? '')),
             'stock'         => max(0, (float) ($data['stock']         ?? 0)),
-            'unit'          => trim($data['unit']          ?? ''),
             'cost'          => max(0, (float) ($data['cost']          ?? 0)),
             'reorder_level' => max(0, (float) ($data['reorder_level'] ?? 10)),
-            'is_extra'      => $isExtra,
-            'selling_price' => $isExtra ? max(0, (float) ($data['selling_price'] ?? $data['cost'] ?? 0)) : 0,
+            'is_extra'       => $isExtra,
+            'selling_price'  => $isExtra ? max(0, (float) ($data['selling_price'] ?? $data['cost'] ?? 0)) : 0,
+            'available_from' => $availableFrom,
+            'available_until'=> $availableUntil,
         ];
 
         if (empty($validated['name'])) {
@@ -83,38 +133,42 @@ class Inventory extends Component
             return;
         }
 
-        if ($id) {
-            $product  = Product::findOrFail($id);
-            $oldStock = (float) $product->stock;
-            $product->update($validated);
+        \DB::transaction(function () use ($id, $validated) {
+            if ($id) {
+                $product  = Product::findOrFail($id);
+                $oldStock = (float) $product->stock;
+                $product->update($validated);
 
-            if (abs($oldStock - $validated['stock']) > 0.001) {
-                StockMovement::create([
-                    'product_id'     => $product->id,
-                    'product_name'   => $product->name,
-                    'type'           => $validated['stock'] > $oldStock ? 'in' : 'out',
-                    'quantity'       => abs($validated['stock'] - $oldStock),
-                    'previous_stock' => $oldStock,
-                    'new_stock'      => $validated['stock'],
-                    'notes'          => 'Manual adjustment via edit',
-                ]);
+                if (abs($oldStock - $validated['stock']) > 0.001) {
+                    StockMovement::create([
+                        'product_id'     => $product->id,
+                        'product_name'   => $product->name,
+                        'type'           => $validated['stock'] > $oldStock ? 'in' : 'out',
+                        'quantity'       => abs($validated['stock'] - $oldStock),
+                        'unit_cost'      => (float) $product->cost,
+                        'previous_stock' => $oldStock,
+                        'new_stock'      => $validated['stock'],
+                        'notes'          => 'Manual adjustment via edit',
+                    ]);
+                }
+            } else {
+                $product = Product::create($validated);
+                if ($validated['stock'] > 0) {
+                    StockMovement::create([
+                        'product_id'     => $product->id,
+                        'product_name'   => $product->name,
+                        'type'           => 'in',
+                        'quantity'       => $validated['stock'],
+                        'unit_cost'      => (float) $validated['cost'],
+                        'previous_stock' => 0,
+                        'new_stock'      => $validated['stock'],
+                        'notes'          => 'Initial stock',
+                    ]);
+                }
             }
-            $this->dispatch('inventory-flash', message: '✅ Product updated!');
-        } else {
-            $product = Product::create($validated);
-            if ($validated['stock'] > 0) {
-                StockMovement::create([
-                    'product_id'     => $product->id,
-                    'product_name'   => $product->name,
-                    'type'           => 'in',
-                    'quantity'       => $validated['stock'],
-                    'previous_stock' => 0,
-                    'new_stock'      => $validated['stock'],
-                    'notes'          => 'Initial stock',
-                ]);
-            }
-            $this->dispatch('inventory-flash', message: '✅ Product added!');
-        }
+        });
+
+        $this->dispatch('inventory-flash', message: $id ? '✅ Product updated!' : '✅ Product added!');
 
         $this->dispatch('extras-updated');
         $this->dispatch('close-product-modal');
@@ -149,20 +203,23 @@ class Inventory extends Component
             return;
         }
 
-        $product  = Product::findOrFail($productId);
-        $prev     = (float) $product->stock;
-        $newStock = $type === 'in' ? $prev + $qty : max(0, $prev - $qty);
+        \DB::transaction(function () use ($productId, $type, $qty, $notes) {
+            $product  = Product::findOrFail($productId);
+            $prev     = (float) $product->stock;
+            $newStock = $type === 'in' ? $prev + $qty : max(0, $prev - $qty);
 
-        $product->update(['stock' => $newStock]);
-        StockMovement::create([
-            'product_id'     => $product->id,
-            'product_name'   => $product->name,
-            'type'           => $type,
-            'quantity'       => $qty,
-            'previous_stock' => $prev,
-            'new_stock'      => $newStock,
-            'notes'          => $notes ?: ($type === 'in' ? 'Stock added' : 'Stock removed'),
-        ]);
+            $product->update(['stock' => $newStock]);
+            StockMovement::create([
+                'product_id'     => $product->id,
+                'product_name'   => $product->name,
+                'type'           => $type,
+                'quantity'       => $qty,
+                'unit_cost'      => (float) $product->cost,
+                'previous_stock' => $prev,
+                'new_stock'      => $newStock,
+                'notes'          => $notes ?: ($type === 'in' ? 'Stock added' : 'Stock removed'),
+            ]);
+        });
 
         $this->dispatch('inventory-flash', message: '✅ Stock updated!');
         $this->dispatch('close-stock-modal');
@@ -176,10 +233,13 @@ class Inventory extends Component
         $nowExtra = !$product->is_extra;
         $product->update([
             'is_extra'      => $nowExtra,
-            'selling_price' => $nowExtra ? (float) $product->cost : 0,
+            // When enabling as an extra, keep any existing selling_price if already set;
+            // otherwise default to 0 so the admin is forced to set a real sell price.
+            // Never auto-default to cost price — that would mean selling at zero profit.
+            'selling_price' => $nowExtra ? max((float) $product->selling_price, 0) : 0,
         ]);
         $this->dispatch('inventory-flash', message: $nowExtra
-            ? "✅ {$product->name} added to extras menu!"
+            ? "✅ {$product->name} added to extras menu! Set a selling price to earn profit."
             : "🚫 {$product->name} removed from extras menu."
         );
         $this->dispatch('extras-updated');
@@ -209,6 +269,58 @@ class Inventory extends Component
         $this->dispatch('inventory-flash', message: '🔄 Sample data restored!');
         $this->syncAll();
     }
+
+    #[Renderless]
+    public function resetAllStock(): void
+    {
+        \DB::transaction(function () {
+            $products = Product::all();
+            foreach ($products as $product) {
+                $prev = (float) $product->stock;
+                if ($prev > 0) {
+                    $product->update(['stock' => 0]);
+                    StockMovement::create([
+                        'product_id'     => $product->id,
+                        'product_name'   => $product->name,
+                        'type'           => 'out',
+                        'quantity'       => $prev,
+                        'unit_cost'      => (float) $product->cost,
+                        'previous_stock' => $prev,
+                        'new_stock'      => 0,
+                        'notes'          => 'Stock reset to zero',
+                    ]);
+                }
+            }
+        });
+        $this->dispatch('inventory-flash', message: '🔄 All stock reset to zero!');
+        $this->dispatch('extras-updated');
+        $this->syncAll();
+    }
+
+    #[Renderless]
+    public function deleteAllProducts(): void
+    {
+        $driver = \DB::getDriverName();
+        if ($driver === 'mysql') {
+            \DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        } elseif ($driver === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys = OFF');
+        }
+
+        StockMovement::truncate();
+        Product::truncate();
+
+        if ($driver === 'mysql') {
+            \DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        } elseif ($driver === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys = ON');
+        }
+
+        $this->dispatch('inventory-flash', message: '🗑️ All products deleted.');
+        $this->dispatch('extras-updated');
+        $this->syncAll();
+    }
+
 
     public function render()
     {

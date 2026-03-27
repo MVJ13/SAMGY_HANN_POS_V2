@@ -23,7 +23,7 @@ Route::get('/', function () {
     return view('pos');
 })->middleware('auth');
 
-// Report download (admin + super_admin only)
+// Report download (admin + super_admin only) — Fix #6: throttled to 10 requests/minute
 Route::get('/report/download', [ReportController::class, 'download'])
-    ->middleware('auth')
+    ->middleware(['auth', 'throttle:10,1'])
     ->name('report.download');

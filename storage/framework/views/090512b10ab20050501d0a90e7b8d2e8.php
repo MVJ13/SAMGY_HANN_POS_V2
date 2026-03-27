@@ -1,4 +1,4 @@
-<div wire:poll.30s x-data="{
+<div x-data="{
     orderModal: { open: false, order: null },
     openOrder(order) { this.orderModal.order = order; this.orderModal.open = true; },
     closeOrder() { this.orderModal.open = false; setTimeout(() => this.orderModal.order = null, 200); }
@@ -14,7 +14,7 @@
             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
         </div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-            <span class="st-last-updated">Live · updates every 30s</span>
+            <span class="st-last-updated">Live · updates on new orders</span>
             <button wire:click="$refresh" class="st-refresh-btn">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
                 Refresh
@@ -255,7 +255,7 @@
                                     'discount_amount'  => (float)$order->discount_amount,
                                     'total'            => (float)$order->total,
                                 ])); ?>)"
-                                style="background:var(--bg-input);color:var(--text-secondary);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:0.78em;cursor:pointer;white-space:nowrap;transition:all 0.15s;"
+                                style="background:#F5F2EF;color:var(--text-secondary);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:0.78em;cursor:pointer;white-space:nowrap;transition:all 0.15s;"
                                 onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'"
                                 onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'"
                             >👁 View</button>
@@ -269,7 +269,7 @@
     </div>
 
     
-    <div id="stats-chart-data" data-chart='<?php echo json_encode($chartData, 15, 512) ?>' style="display:none;" wire:ignore.self></div>
+    <div id="stats-chart-data" data-chart='<?php echo json_encode($chartData, 15, 512) ?>' style="display:none;"></div>
 
     <script>
     (function() {
@@ -286,9 +286,9 @@
 
             ['chart-revenue-daily','chart-payment','chart-hourly','chart-packages'].forEach(destroyChart);
 
-            Chart.defaults.color = '#B8B8BC';
-            Chart.defaults.borderColor = '#3A3A3F';
-            var g = { color: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)' };
+            Chart.defaults.color = '#374151';
+            Chart.defaults.borderColor = '#E5E7EB';
+            var g = { color: 'rgba(0,0,0,0.04)', borderColor: 'rgba(0,0,0,0.08)' };
 
             // Revenue bar+line
             var el = document.getElementById('chart-revenue-daily');
@@ -298,8 +298,8 @@
                     data: {
                         labels: chartData.daily.labels,
                         datasets: [
-                            { label: 'Revenue (₱)', data: chartData.daily.revenue, backgroundColor: 'rgba(255,107,107,0.65)', borderColor: '#FF6B6B', borderWidth: 0, borderRadius: 5, yAxisID: 'yR' },
-                            { label: 'Orders', data: chartData.daily.orders, type: 'line', borderColor: '#06D6A0', backgroundColor: 'rgba(6,214,160,0.1)', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#06D6A0', tension: 0.4, fill: true, yAxisID: 'yO' }
+                            { label: 'Revenue (₱)', data: chartData.daily.revenue, backgroundColor: 'rgba(212,69,26,0.70)', borderColor: '#D4451A', borderWidth: 0, borderRadius: 5, yAxisID: 'yR' },
+                            { label: 'Orders', data: chartData.daily.orders, type: 'line', borderColor: '#1E40AF', backgroundColor: 'rgba(30,64,175,0.08)', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#1E40AF', tension: 0.4, fill: true, yAxisID: 'yO' }
                         ]
                     },
                     options: {
@@ -371,7 +371,7 @@
                     type: 'doughnut',
                     data: {
                         labels: Object.keys(chartData.packages),
-                        datasets: [{ data: Object.values(chartData.packages), backgroundColor: ['rgba(255,107,107,0.85)','rgba(255,183,3,0.85)','rgba(6,214,160,0.85)'], borderColor: ['#FF6B6B','#FFB703','#06D6A0'], borderWidth: 2, hoverOffset: 6 }]
+                        datasets: [{ data: Object.values(chartData.packages), backgroundColor: ['rgba(212,69,26,0.85)','rgba(212,175,55,0.85)','rgba(30,64,175,0.85)'], borderColor: ['#D4451A','#D4AF37','#1E40AF'], borderWidth: 2, hoverOffset: 6 }]
                     },
                     options: {
                         responsive: true, maintainAspectRatio: false, cutout: '62%',
@@ -442,11 +442,11 @@
 
                     
                     <div style="display:flex;gap:10px;margin-bottom:16px;">
-                        <div style="background:var(--bg-input);border-radius:8px;padding:10px 14px;flex:1;text-align:center;">
+                        <div style="background:#F5F2EF;border-radius:8px;padding:10px 14px;flex:1;text-align:center;">
                             <div style="font-size:0.75em;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Guests</div>
                             <div style="font-size:1.2em;font-weight:700;color:var(--text-primary);" x-text="'👥 ' + orderModal.order.total_people + ' pax'"></div>
                         </div>
-                        <div style="background:var(--bg-input);border-radius:8px;padding:10px 14px;flex:1;text-align:center;">
+                        <div style="background:#F5F2EF;border-radius:8px;padding:10px 14px;flex:1;text-align:center;">
                             <div style="font-size:0.75em;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Payment</div>
                             <div style="font-size:1.2em;font-weight:700;color:var(--text-primary);" x-text="(orderModal.order.payment === 'Cash' ? '💵 ' : '📱 ') + orderModal.order.payment"></div>
                         </div>
@@ -457,7 +457,7 @@
                         <div style="margin-bottom:14px;">
                             <div style="font-size:0.75em;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px;">🍖 Packages</div>
                             <template x-for="pkg in orderModal.order.packages" :key="pkg.name">
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:var(--bg-input);border-radius:6px;margin-bottom:4px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:#F5F2EF;border-radius:6px;margin-bottom:4px;">
                                     <span style="color:var(--text-primary);" x-text="pkg.people + '× ' + pkg.name"></span>
                                     <span style="color:var(--primary);font-weight:600;" x-text="'₱' + (pkg.amount ?? (pkg.people * pkg.price)).toLocaleString()"></span>
                                 </div>
@@ -470,7 +470,7 @@
                         <div style="margin-bottom:14px;">
                             <div style="font-size:0.75em;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px;">✨ Add-ons</div>
                             <template x-for="addon in orderModal.order.addons" :key="addon.name">
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:var(--bg-input);border-radius:6px;margin-bottom:4px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:#F5F2EF;border-radius:6px;margin-bottom:4px;">
                                     <span style="color:var(--text-primary);" x-text="addon.people + '× ' + addon.name"></span>
                                     <span style="color:var(--primary);font-weight:600;" x-text="'₱' + (addon.amount ?? (addon.people * addon.price)).toLocaleString()"></span>
                                 </div>
@@ -483,7 +483,7 @@
                         <div style="margin-bottom:14px;">
                             <div style="font-size:0.75em;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px;">🛒 Extras</div>
                             <template x-for="item in orderModal.order.extra_items" :key="item.name">
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:var(--bg-input);border-radius:6px;margin-bottom:4px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:#F5F2EF;border-radius:6px;margin-bottom:4px;">
                                     <span style="color:var(--text-primary);" x-text="item.qty + '× ' + item.name"></span>
                                     <span style="color:var(--primary);font-weight:600;" x-text="'₱' + item.amount.toLocaleString()"></span>
                                 </div>
